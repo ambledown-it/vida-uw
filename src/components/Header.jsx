@@ -13,7 +13,7 @@ const Header = () => {
             alt="Vida Logo" 
             className="h-12 w-auto"
           />
-          <h2 className="font-bold text-3xl">
+          <h2 className="font-bold text-3xl text-white">
             Vida Life Underwriting Portal
           </h2>
         </div>

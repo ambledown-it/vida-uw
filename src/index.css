@@ -28,10 +28,9 @@
   font-family: 'ApexNew';
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #001122;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -68,16 +67,19 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #93b244;
+  color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.2s ease-in-out;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: #839f3c;
+  border-color: transparent;
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid #93b244;
+  outline-offset: 2px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -100,4 +102,62 @@ button:focus-visible {
   padding: 0;
   display: flex;
   flex-direction: column;
+}
+
+.login-form button {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.login-form button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+  border-radius: 4px; /* Rounded edges for the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded edges for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the thumb on hover */
+}
+
+/* Global Table Styles */
+tr.hover-effect {
+  transition: all 0.2s ease-in-out;
+}
+
+tr.hover-effect:hover {
+  background-color: #f3f4f6;
+}
+
+tr.hover-effect td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  color: #111827;
+  text-align: left;
+}
+
+tr.hover-effect:hover td {
+  font-weight: bold;
+  color: #213547;
+}
+
+/* Zebra striping */
+tr.hover-effect:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+tr.hover-effect:nth-child(odd) {
+  background-color: #ffffff;
 }
