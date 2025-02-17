@@ -26,7 +26,7 @@ const FilterCard = ({
   }
 
   return (
-    <div className="bg-transparent p-4 mb-4">
+    <div className="bg-white p-4 mb-4 rounded-lg shadow-sm">
       <div className="flex flex-wrap gap-6 items-end">
         {/* Search Filter */}
         <div className="flex-1">
