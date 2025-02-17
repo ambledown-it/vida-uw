@@ -5,7 +5,7 @@ const MainContent = ({ children, fullHeight }) => {
     <main className={`flex-1 w-full min-h-0 ${fullHeight ? 'h-screen' : ''}`}>
       <div className="h-full w-full p-4">
         <div 
-          className={`rounded-lg p-6 h-full w-full ${
+          className={`rounded-lg p-0 h-full w-full ${
             isLoginPage ? 'bg-no-repeat bg-cover bg-center' : 'bg-transparent'
           }`}
           style={isLoginPage ? { 
