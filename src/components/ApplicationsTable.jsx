@@ -27,6 +27,7 @@ const ApplicationsTable = () => {
   const { applications, loading, error } = useApplications()
   const [searchTerm, setSearchTerm] = useState('')
   const [termFilter, setTermFilter] = useState(0) // 0 means no filter
+  const [dateRange, setDateRange] = useState({ from: '', to: '' })
 
   console.log('Search Term:', searchTerm)
   console.log('All Applications:', applications)
@@ -52,9 +53,20 @@ const ApplicationsTable = () => {
         }
       }
 
+      // Date range filter
+      if (dateRange.from || dateRange.to) {
+        const appDate = new Date(app.datecreated)
+        if (dateRange.from && appDate < new Date(dateRange.from)) {
+          return false
+        }
+        if (dateRange.to && appDate > new Date(dateRange.to)) {
+          return false
+        }
+      }
+
       return true
     })
-  }, [applications, searchTerm, termFilter])
+  }, [applications, searchTerm, termFilter, dateRange])
 
   console.log('Filtered Applications:', filteredApplications)
 
@@ -81,6 +93,8 @@ const ApplicationsTable = () => {
         onSearchChange={setSearchTerm}
         termFilter={termFilter}
         onTermFilterChange={setTermFilter}
+        dateRange={dateRange}
+        onDateRangeChange={setDateRange}
       />
 
       {/* Table */}
@@ -88,25 +102,25 @@ const ApplicationsTable = () => {
         <table className="w-full border-collapse">
           <thead className="bg-[#213547]">
             <tr>
-              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white first:rounded-tl-lg w-[15%] bg-[#213547]">
+              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white first:rounded-tl-lg w-[15%] bg-[#001122]">
                 Application ID
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[20%] bg-[#213547]">
+              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[20%] bg-[#001122]">
                 Applicant Name
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[15%] bg-[#213547]">
+              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[15%] bg-[#001122]">
                 ID Number
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[15%] bg-[#213547]">
+              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[15%] bg-[#001122]">
                 Date Created
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[10%] bg-[#213547]">
+              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[10%] bg-[#001122]">
                 Term
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[15%] bg-[#213547]">
+              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white w-[15%] bg-[#001122]">
                 Sum Assured
               </th>
-              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white last:rounded-tr-lg w-[10%] bg-[#213547]">
+              <th className="sticky top-0 px-6 py-3 text-left text-sm font-bold text-white last:rounded-tr-lg w-[10%] bg-[#001122]">
                 Sales Channel
               </th>
             </tr>

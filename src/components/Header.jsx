@@ -1,6 +1,16 @@
 import { UserRound } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 const Header = () => {
+  const [firstName, setFirstName] = useState('')
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (user && user.firstname) {
+      setFirstName(user.firstname)
+    }
+  }, [])
+
   return (
     <header 
       className="sticky top-0 z-10 w-full h-24 bg-no-repeat bg-cover"
@@ -17,7 +27,12 @@ const Header = () => {
             Vida Life Underwriting Portal
           </h2>
         </div>
-        <UserRound className="text-white w-8 h-8" />
+        <div className="flex items-center gap-3 text-white">
+          <span className="text-lg font-medium">
+            {firstName}
+          </span>
+          <UserRound className="w-8 h-8" />
+        </div>
       </div>
     </header>
   )

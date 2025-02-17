@@ -1,6 +1,13 @@
 import { Search as SearchIcon } from 'lucide-react'
 
-const FilterCard = ({ searchTerm, onSearchChange, termFilter, onTermFilterChange }) => {
+const FilterCard = ({ 
+  searchTerm, 
+  onSearchChange, 
+  termFilter, 
+  onTermFilterChange,
+  dateRange,
+  onDateRangeChange
+}) => {
   const handleTermChange = (e) => {
     const value = e.target.value
     // Convert to number, if empty string or invalid, set to 0 (All)
@@ -11,9 +18,16 @@ const FilterCard = ({ searchTerm, onSearchChange, termFilter, onTermFilterChange
     }
   }
 
+  const handleDateChange = (field) => (e) => {
+    onDateRangeChange({
+      ...dateRange,
+      [field]: e.target.value
+    })
+  }
+
   return (
     <div className="bg-transparent p-4 mb-4">
-      <div className="flex flex-wrap gap-6 items-center">
+      <div className="flex flex-wrap gap-6 items-end">
         {/* Search Filter */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-[#213547] mb-1">
@@ -27,6 +41,28 @@ const FilterCard = ({ searchTerm, onSearchChange, termFilter, onTermFilterChange
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#213547] focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        {/* Date Range Filter */}
+        <div className="min-w-[300px]">
+          <label className="block text-sm font-medium text-[#213547] mb-1">
+            Date Range
+          </label>
+          <div className="flex gap-2 items-center">
+            <input
+              type="date"
+              value={dateRange.from}
+              onChange={handleDateChange('from')}
+              className="flex-1 px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#213547] focus:border-transparent"
+            />
+            <span className="text-[#213547]">to</span>
+            <input
+              type="date"
+              value={dateRange.to}
+              onChange={handleDateChange('to')}
+              className="flex-1 px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#213547] focus:border-transparent"
             />
           </div>
         </div>
