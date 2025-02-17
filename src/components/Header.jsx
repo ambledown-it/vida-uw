@@ -4,7 +4,7 @@ const Header = () => {
   return (
     <header 
       className="sticky top-0 z-10 w-full h-24 bg-no-repeat bg-cover"
-      style={{ backgroundImage: 'url("/bg-wide.svg")' }}
+      style={{ backgroundImage: 'url("/bg-header.svg")' }}
     >
       <div className="w-full h-full px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">

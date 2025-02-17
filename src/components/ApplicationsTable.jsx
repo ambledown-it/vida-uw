@@ -1,4 +1,6 @@
 import { useApplications } from '../contexts/ApplicationsContext'
+import { useState, useMemo } from 'react'
+import FilterCard from './FilterCard'
 
 const CommissionBadge = ({ value }) => {
   let badgeContent = ''
@@ -10,7 +12,7 @@ const CommissionBadge = ({ value }) => {
       badgeColor = 'bg-blue-100 text-blue-800'
       break
     default:
-      badgeContent = 'Broker'
+      badgeContent = 'Brokerage'
       badgeColor = 'bg-[#edf2e6] text-[#93b244]'
   }
 
@@ -23,6 +25,38 @@ const CommissionBadge = ({ value }) => {
 
 const ApplicationsTable = () => {
   const { applications, loading, error } = useApplications()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [termFilter, setTermFilter] = useState(0) // 0 means no filter
+
+  console.log('Search Term:', searchTerm)
+  console.log('All Applications:', applications)
+
+  const filteredApplications = useMemo(() => {
+    return applications.filter(app => {
+      // Search term filter
+      if (searchTerm) {
+        const searchValue = searchTerm.toLowerCase().trim()
+        const fullName = `${app.firstnames} ${app.surname}`.toLowerCase()
+        const idNumber = app.idnumber.toLowerCase()
+        
+        if (!fullName.includes(searchValue) && !idNumber.includes(searchValue)) {
+          return false
+        }
+      }
+
+      // Term filter
+      if (termFilter > 0) {
+        const appTermYears = app.term / 12
+        if (appTermYears !== termFilter) {
+          return false
+        }
+      }
+
+      return true
+    })
+  }, [applications, searchTerm, termFilter])
+
+  console.log('Filtered Applications:', filteredApplications)
 
   if (loading) {
     return (
@@ -42,6 +76,14 @@ const ApplicationsTable = () => {
 
   return (
     <div className="h-full flex flex-col rounded-lg overflow-hidden">
+      <FilterCard 
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        termFilter={termFilter}
+        onTermFilterChange={setTermFilter}
+      />
+
+      {/* Table */}
       <div className="flex-1 overflow-auto">
         <table className="w-full border-collapse">
           <thead className="bg-[#213547]">
@@ -70,19 +112,19 @@ const ApplicationsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {applications.map((app, index) => (
+            {filteredApplications.map((app, index) => (
               <tr 
-                key={app.appid} 
+                key={`${app.appid}-${index}`}
                 className={`
                   hover-effect
-                  ${index === applications.length - 1 ? 'last:border-b-0 last:rounded-b-lg' : ''}
+                  ${index === filteredApplications.length - 1 ? 'last:border-b-0 last:rounded-b-lg' : ''}
                 `}
               >
                 <td className="w-[15%]">{app.appid}</td>
                 <td className="w-[20%]">{`${app.firstnames} ${app.surname}`}</td>
                 <td className="w-[15%]">{app.idnumber}</td>
                 <td className="w-[15%]">{new Date(app.datecreated).toLocaleDateString()}</td>
-                <td className="w-[10%]">{app.term} years</td>
+                <td className="w-[10%]">{app.term/12} years</td>
                 <td className="w-[15%]">R {parseFloat(app.sumassured).toLocaleString()}</td>
                 <td className="w-[10%]">
                   <CommissionBadge value={app.commissionstructure} />
