@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react'
 import FilterCard from './FilterCard'
 import TabsCard from './TabsCard'
 import { 
-  Loader2, 
+  Loader, 
   AlertCircle, 
   CheckCircle2, 
   XCircle 
@@ -14,11 +14,11 @@ const StatusIcon = ({ status }) => {
   
   switch (status?.toLowerCase()) {
     case 'active':
-      return <Loader2 className={`${iconClass} text-blue-500 animate-spin`} title="Active" />
+      return <Loader className={`${iconClass} text-[#213547]`} title="Active" />
     case 'referred':
       return <AlertCircle className={`${iconClass} text-amber-500`} title="Referred" />
     case 'accepted':
-      return <CheckCircle2 className={`${iconClass} text-green-500`} title="Accepted" />
+      return <CheckCircle2 className={`${iconClass} text-[#93b244]`} title="Accepted" />
     case 'rejected':
       return <XCircle className={`${iconClass} text-red-500`} title="Rejected" />
     default:
