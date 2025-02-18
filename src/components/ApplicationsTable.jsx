@@ -6,8 +6,10 @@ import {
   Loader, 
   AlertCircle, 
   CheckCircle2, 
-  XCircle 
+  XCircle,
+  Plus
 } from 'lucide-react'
+import ApplicationDrawer from './ApplicationDrawer'
 
 const StatusIcon = ({ status }) => {
   const iconClass = "w-5 h-5"
@@ -55,6 +57,7 @@ const ApplicationsTable = () => {
   const [activeTab, setActiveTab] = useState('5') // Default to All applications
   const [salesChannel, setSalesChannel] = useState('')
   const [sumAssuredFilter, setSumAssuredFilter] = useState(0)
+  const [selectedApplication, setSelectedApplication] = useState(null)
 
   const tabCounts = useMemo(() => {
     return applications.reduce((acc, app) => {
@@ -119,6 +122,14 @@ const ApplicationsTable = () => {
 
   console.log('Filtered Applications:', filteredApplications)
 
+  const handleActionClick = (app) => {
+    setSelectedApplication({
+      id: app.appid,
+      name: `${app.firstnames} ${app.surname}`,
+      idNumber: app.idnumber
+    })
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-full rounded-r-lg shadow-sm">
@@ -167,8 +178,9 @@ const ApplicationsTable = () => {
                 <col className="w-[15%]" />
                 <col className="w-[15%]" />
                 <col className="w-[10%]" />
-                <col className="w-[15%]" />
                 <col className="w-[10%]" />
+                <col className="w-[10%]" />
+                <col className="w-[5%]" />
               </colgroup>
               <thead>
                 <tr>
@@ -196,6 +208,9 @@ const ApplicationsTable = () => {
                   <th className="px-6 py-3 text-left text-sm font-bold text-white last:rounded-tr-lg">
                     Sales Channel
                   </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white last:rounded-tr-lg">
+                    {/* Empty header for action buttons */}
+                  </th>
                 </tr>
               </thead>
             </table>
@@ -211,8 +226,9 @@ const ApplicationsTable = () => {
                 <col className="w-[15%]" />
                 <col className="w-[15%]" />
                 <col className="w-[10%]" />
-                <col className="w-[15%]" />
                 <col className="w-[10%]" />
+                <col className="w-[10%]" />
+                <col className="w-[5%]" />
               </colgroup>
               <tbody>
                 {filteredApplications.map((app, index) => (
@@ -237,6 +253,16 @@ const ApplicationsTable = () => {
                     <td className="px-6 py-4">
                       <CommissionBadge value={app.commissionstructure} />
                     </td>
+                    <td className="px-6 py-4">
+                      <div className="flex justify-center">
+                        <button 
+                          className="table-action-button"
+                          onClick={() => handleActionClick(app)}
+                        >
+                          <Plus className="w-5 h-5 text-white" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -244,6 +270,14 @@ const ApplicationsTable = () => {
           </div>
         </div>
       </div>
+
+      <ApplicationDrawer 
+        isOpen={!!selectedApplication}
+        onClose={() => setSelectedApplication(null)}
+        applicationId={selectedApplication?.id}
+        applicantName={selectedApplication?.name}
+        idNumber={selectedApplication?.idNumber}
+      />
     </div>
   )
 }

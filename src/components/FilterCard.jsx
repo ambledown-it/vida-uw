@@ -34,7 +34,7 @@ const FilterCard = ({
         {/* Search Filter */}
         <div>
           <label className="block text-sm font-medium text-[#213547] mb-2">
-            Search Applications
+            Search
           </label>
           <div className="relative">
             <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -67,7 +67,7 @@ const FilterCard = ({
         {/* Date Range Filter */}
         <div>
           <label className="block text-sm font-medium text-[#213547] mb-2">
-            Date Range
+            Date Created Range
           </label>
           <div className="flex flex-col gap-2">
             <input
@@ -131,7 +131,7 @@ const FilterCard = ({
         <div>
           <div className="flex justify-between items-center mb-2">
             <label className="block text-sm font-medium text-[#213547]">
-              Sum Assured
+              Minimum Sum Assured
             </label>
             <span className="text-sm text-[#213547] font-medium">
               {sumAssuredFilter ? formatCurrency(sumAssuredFilter) : 'All'}

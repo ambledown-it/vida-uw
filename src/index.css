@@ -176,3 +176,78 @@ tr.hover-effect:nth-child(odd) {
   outline: none;
   box-shadow: none;
 }
+
+/* Table Action Button Styles */
+.table-action-button {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: #93b244;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.table-action-button:hover {
+  background-color: #839f3c;
+}
+
+.table-action-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #93b244;
+}
+
+/* Override any default button styles */
+.table-action-button.button {
+  background-color: #93b244;
+  border: none;
+  padding: 0;
+}
+
+.table-action-button.button:hover {
+  background-color: #839f3c;
+  border: none;
+}
+
+.table-action-button.button:focus {
+  outline: none;
+}
+
+/* Drawer Styles */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+/* Drawer Exit Button Style */
+.drawer-exit-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.drawer-exit-button:hover {
+  background-color: transparent;
+  opacity: 0.7;
+}
+
+.drawer-exit-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.drawer-exit-button.button {
+  background-color: transparent;
+}
