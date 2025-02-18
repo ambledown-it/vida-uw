@@ -4,6 +4,8 @@ import { useSingleApplication } from '../contexts/SingleApplicationContext'
 import ApplicantDetails from './ApplicantDetails'
 import PolicyDetails from './PolicyDetails'
 import MagnumDetails from './MagnumDetails'
+import PremiumDetails from './PremiumDetails'
+import DrawerButtons from './DrawerButtons'
 
 const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNumber }) => {
   const { applicationDetails, fetchApplicationDetails } = useSingleApplication()
@@ -17,7 +19,7 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
   return (
     <div 
       className={`
-        fixed top-0 right-0 h-full w-[30%] bg-white shadow-lg
+        fixed top-0 right-0 h-full w-[45%] bg-white
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : 'translate-x-full'}
         z-50
@@ -44,15 +46,25 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className="divide-y divide-gray-200 pb-24">
         {applicationDetails && (
           <>
-            <PolicyDetails policyData={applicationDetails[0]} />
-            <ApplicantDetails applicantData={applicationDetails[0]} />
-            <MagnumDetails magnumData={applicationDetails[0]} />
+            <div className="px-6 py-4 bg-white">
+              <PolicyDetails policyData={applicationDetails[0]} />
+              <PremiumDetails premiumData={applicationDetails[0]} />
+            </div>
+            <div className="px-6 py-4 bg-gray-50">
+              <ApplicantDetails applicantData={applicationDetails[0]} />
+            </div>
+            <div className="px-6 py-4 bg-white">
+              <MagnumDetails magnumData={applicationDetails[0]} />
+            </div>
           </>
         )}
       </div>
+
+      {/* Buttons */}
+      <DrawerButtons />
     </div>
   )
 }

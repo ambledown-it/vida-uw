@@ -1,3 +1,5 @@
+import { User, Phone, Mail, Calendar, Fingerprint, UserCircle } from 'lucide-react'
+
 const ApplicantDetails = ({ applicantData }) => {
   const formatAddress = () => {
     const parts = [
@@ -33,44 +35,83 @@ const ApplicantDetails = ({ applicantData }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-sm">
+    <div>
       <h3 className="text-lg font-bold text-[#213547] mb-4">Applicant Details</h3>
-      <table className="drawer-table">
-        <tbody>
-          <tr>
-            <td>ID Number</td>
-            <td>{applicantData.idnumber}</td>
-          </tr>
-          <tr>
-            <td>First Names</td>
-            <td>{applicantData.firstnames}</td>
-          </tr>
-          <tr>
-            <td>Surname</td>
-            <td>{applicantData.surname}</td>
-          </tr>
-          <tr>
-            <td>Date of Birth</td>
-            <td>{formatDate(applicantData.dob)}</td>
-          </tr>
-          <tr>
-            <td>Gender</td>
-            <td>{formatGender(applicantData.gender)}</td>
-          </tr>
-          <tr>
-            <td>Cell Phone</td>
-            <td>{applicantData.cellphone}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td>{applicantData.email}</td>
-          </tr>
-          <tr>
-            <td>Address</td>
-            <td>{formatAddress()}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-lg">
+              <User className="w-5 h-5 text-[#213547]" />
+            </div>
+            <div>
+              <div className="text-sm text-[#213547]/70">Full Name</div>
+              <div className="font-bold text-[#213547]">
+                {applicantData.firstnames} {applicantData.surname}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-lg">
+              <Fingerprint className="w-5 h-5 text-[#213547]" />
+            </div>
+            <div>
+              <div className="text-sm text-[#213547]/70">ID Number</div>
+              <div className="font-bold text-[#213547]">{applicantData.idnumber}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-lg">
+              <Calendar className="w-5 h-5 text-[#213547]" />
+            </div>
+            <div>
+              <div className="text-sm text-[#213547]/70">Date of Birth</div>
+              <div className="font-bold text-[#213547]">{formatDate(applicantData.dob)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-lg">
+              <UserCircle className="w-5 h-5 text-[#213547]" />
+            </div>
+            <div>
+              <div className="text-sm text-[#213547]/70">Gender</div>
+              <div className="font-bold text-[#213547]">{formatGender(applicantData.gender)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-lg">
+              <Phone className="w-5 h-5 text-[#213547]" />
+            </div>
+            <div>
+              <div className="text-sm text-[#213547]/70">Cell Phone</div>
+              <div className="font-bold text-[#213547]">{applicantData.cellphone}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-lg">
+              <Mail className="w-5 h-5 text-[#213547]" />
+            </div>
+            <div>
+              <div className="text-sm text-[#213547]/70">Email</div>
+              <div className="font-bold text-[#213547]">{applicantData.email}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
