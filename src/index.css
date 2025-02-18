@@ -477,3 +477,28 @@ tr.hover-effect:nth-child(odd) {
   outline: none;
   box-shadow: 0 0 0 2px rgba(147, 178, 68, 0.2);
 }
+
+/* Drawer Backdrop Style */
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(33, 53, 71, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 50;
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
