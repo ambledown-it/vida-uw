@@ -77,7 +77,6 @@ button:hover {
 }
 button:focus,
 button:focus-visible {
-  outline: 2px solid #93b244;
   outline-offset: 2px;
 }
 
@@ -345,4 +344,136 @@ tr.hover-effect:nth-child(odd) {
 
 .premium-schedule-row:not(:last-child) {
   border-bottom: 1px solid #f3f4f6;
+}
+
+/* Manual Underwriting Styles */
+.decision-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid transparent;
+}
+
+.decision-button.accept {
+  background-color: #F3F7E9;
+  border-color: #93b244;
+  color: #93b244;
+}
+
+.decision-button.accept:hover:not(.selected) {
+  background-color: #edf2e6;
+}
+
+.decision-button.reject {
+  background-color: #FEF2F2;
+  border-color: #EF4444;
+  color: #EF4444;
+}
+
+.decision-button.reject:hover:not(.selected) {
+  background-color: #fee2e2;
+}
+
+.decision-button:not(.accept):not(.reject) {
+  background-color: white;
+  border-color: #e5e7eb;
+  color: #374151;
+}
+
+.decision-button:not(.accept):not(.reject):hover {
+  background-color: #f9fafb;
+}
+
+/* Add Adjustment Button Style */
+.add-adjustment-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: #213547;
+  transition: all 0.2s ease-in-out;
+}
+
+.add-adjustment-button:hover {
+  background-color: transparent;
+  color: #93b244;
+}
+
+.add-adjustment-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.add-adjustment-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Delete Adjustment Button Style */
+.delete-adjustment-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: #EF4444;
+  transition: all 0.2s ease-in-out;
+}
+
+.delete-adjustment-button:hover {
+  background-color: transparent;
+  color: #DC2626;
+}
+
+.delete-adjustment-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.delete-adjustment-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Radio Button Styles */
+.custom-radio {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #213547;
+  border-radius: 50%;
+  margin: 0;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-radio:checked {
+  border-color: #93b244;
+  background-color: white;
+}
+
+.custom-radio:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #93b244;
+}
+
+.custom-radio:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(147, 178, 68, 0.2);
 }
