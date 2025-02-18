@@ -1,6 +1,30 @@
 import { useApplications } from '../contexts/ApplicationsContext'
 import { useState, useMemo } from 'react'
 import FilterCard from './FilterCard'
+import TabsCard from './TabsCard'
+import { 
+  Loader2, 
+  AlertCircle, 
+  CheckCircle2, 
+  XCircle 
+} from 'lucide-react'
+
+const StatusIcon = ({ status }) => {
+  const iconClass = "w-5 h-5"
+  
+  switch (status?.toLowerCase()) {
+    case 'active':
+      return <Loader2 className={`${iconClass} text-blue-500 animate-spin`} title="Active" />
+    case 'referred':
+      return <AlertCircle className={`${iconClass} text-amber-500`} title="Referred" />
+    case 'accepted':
+      return <CheckCircle2 className={`${iconClass} text-green-500`} title="Accepted" />
+    case 'rejected':
+      return <XCircle className={`${iconClass} text-red-500`} title="Rejected" />
+    default:
+      return null
+  }
+}
 
 const CommissionBadge = ({ value }) => {
   let badgeContent = ''
@@ -17,7 +41,7 @@ const CommissionBadge = ({ value }) => {
   }
 
   return (
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${badgeColor}`}>
+    <span className={`px-2 py-1 text-xs font-medium rounded-r-lg ${badgeColor}`}>
       {badgeContent}
     </span>
   )
@@ -26,14 +50,24 @@ const CommissionBadge = ({ value }) => {
 const ApplicationsTable = () => {
   const { applications, loading, error } = useApplications()
   const [searchTerm, setSearchTerm] = useState('')
-  const [termFilter, setTermFilter] = useState(0) // 0 means no filter
+  const [termFilter, setTermFilter] = useState(0)
   const [dateRange, setDateRange] = useState({ from: '', to: '' })
+  const [activeTab, setActiveTab] = useState('5') // Default to All applications
 
-  console.log('Search Term:', searchTerm)
-  console.log('All Applications:', applications)
+  const tabCounts = useMemo(() => {
+    return applications.reduce((acc, app) => {
+      acc[app.statusid] = (acc[app.statusid] || 0) + 1
+      return acc
+    }, {})
+  }, [applications])
 
   const filteredApplications = useMemo(() => {
     return applications.filter(app => {
+      // Status tab filter - skip for "All" tab
+      if (activeTab !== '5' && app.statusid !== activeTab) {
+        return false
+      }
+
       // Search term filter
       if (searchTerm) {
         const searchValue = searchTerm.toLowerCase().trim()
@@ -66,13 +100,13 @@ const ApplicationsTable = () => {
 
       return true
     })
-  }, [applications, searchTerm, termFilter, dateRange])
+  }, [applications, activeTab, searchTerm, termFilter, dateRange])
 
   console.log('Filtered Applications:', filteredApplications)
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-full rounded-lg shadow-sm">
+      <div className="flex justify-center items-center h-full rounded-r-lg shadow-sm">
         <div className="text-gray-500">Loading applications...</div>
       </div>
     )
@@ -97,82 +131,99 @@ const ApplicationsTable = () => {
         onDateRangeChange={setDateRange}
       />
 
-      {/* Table Card */}
-      <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col min-h-0">
-        {/* Fixed Header */}
-        <div className="bg-[#001122] rounded-t-lg">
-          <table className="w-full table-fixed">
-            <colgroup>
-              <col className="w-[15%]" />
-              <col className="w-[20%]" />
-              <col className="w-[15%]" />
-              <col className="w-[15%]" />
-              <col className="w-[10%]" />
-              <col className="w-[15%]" />
-              <col className="w-[10%]" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-bold text-white first:rounded-tl-lg">
-                  Application ID
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-white">
-                  Applicant Name
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-white">
-                  ID Number
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-white">
-                  Date Created
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-white">
-                  Term
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-white">
-                  Sum Assured
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-white last:rounded-tr-lg">
-                  Sales Channel
-                </th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-
-        {/* Scrollable Body */}
-        <div className="flex-1 overflow-auto min-h-0 rounded-b-lg">
-          <table className="w-full table-fixed">
-            <colgroup>
-              <col className="w-[15%]" />
-              <col className="w-[20%]" />
-              <col className="w-[15%]" />
-              <col className="w-[15%]" />
-              <col className="w-[10%]" />
-              <col className="w-[15%]" />
-              <col className="w-[10%]" />
-            </colgroup>
-            <tbody>
-              {filteredApplications.map((app, index) => (
-                <tr 
-                  key={`${app.appid}-${index}`}
-                  className={`
-                    hover-effect
-                    ${index === filteredApplications.length - 1 ? 'last:border-b-0' : ''}
-                  `}
-                >
-                  <td className="px-6 py-4">{app.appid}</td>
-                  <td className="px-6 py-4">{`${app.firstnames} ${app.surname}`}</td>
-                  <td className="px-6 py-4">{app.idnumber}</td>
-                  <td className="px-6 py-4">{new Date(app.datecreated).toLocaleDateString()}</td>
-                  <td className="px-6 py-4">{app.term/12} years</td>
-                  <td className="px-6 py-4">R {parseFloat(app.sumassured).toLocaleString()}</td>
-                  <td className="px-6 py-4">
-                    <CommissionBadge value={app.commissionstructure} />
-                  </td>
+      {/* Table Card with Tabs */}
+      <div className="flex-1 flex flex-col min-h-0">
+        <TabsCard 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab}
+          tabCounts={tabCounts}
+        />
+        <div className="flex-1 bg-white rounded-b-lg shadow-sm flex flex-col min-h-0">
+          {/* Fixed Header */}
+          <div className="bg-[#213547] rounded-tr-lg">
+            <table className="w-full table-fixed">
+              <colgroup>
+                <col className="w-[5%]" />
+                <col className="w-[15%]" />
+                <col className="w-[15%]" />
+                <col className="w-[15%]" />
+                <col className="w-[15%]" />
+                <col className="w-[10%]" />
+                <col className="w-[15%]" />
+                <col className="w-[10%]" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white first:rounded-tl-lg">
+                    {/* Empty header for status icons */}
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                    Application ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                    Applicant Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                    ID Number
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                    Date Created
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                    Term
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                    Sum Assured
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white last:rounded-tr-lg">
+                    Sales Channel
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+            </table>
+          </div>
+
+          {/* Scrollable Body */}
+          <div className="flex-1 overflow-auto min-h-0 rounded-b-lg">
+            <table className="w-full table-fixed">
+              <colgroup>
+                <col className="w-[5%]" />
+                <col className="w-[15%]" />
+                <col className="w-[15%]" />
+                <col className="w-[15%]" />
+                <col className="w-[15%]" />
+                <col className="w-[10%]" />
+                <col className="w-[15%]" />
+                <col className="w-[10%]" />
+              </colgroup>
+              <tbody>
+                {filteredApplications.map((app, index) => (
+                  <tr 
+                    key={`${app.appid}-${index}`}
+                    className={`
+                      hover-effect
+                      ${index === filteredApplications.length - 1 ? 'last:border-b-0' : ''}
+                    `}
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex justify-center">
+                        <StatusIcon status={app.detailedstatus} />
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">{app.appid}</td>
+                    <td className="px-6 py-4">{`${app.firstnames} ${app.surname}`}</td>
+                    <td className="px-6 py-4">{app.idnumber}</td>
+                    <td className="px-6 py-4">{new Date(app.datecreated).toLocaleDateString()}</td>
+                    <td className="px-6 py-4">{app.term/12} years</td>
+                    <td className="px-6 py-4">R {parseFloat(app.sumassured).toLocaleString()}</td>
+                    <td className="px-6 py-4">
+                      <CommissionBadge value={app.commissionstructure} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
