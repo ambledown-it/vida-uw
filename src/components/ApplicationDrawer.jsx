@@ -26,7 +26,7 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
       `}
     >
       {/* Header */}
-      <div className="bg-[#213547] h-24 px-6 flex items-center">
+      <div className="bg-[#213547] h-24 px-6 flex items-center"       style={{ backgroundImage: 'url("/bg-header.svg")' }}>
         <button
           onClick={onClose}
           className="drawer-exit-button text-white hover:text-gray-200 mr-6"

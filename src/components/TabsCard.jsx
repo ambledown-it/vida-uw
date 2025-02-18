@@ -25,7 +25,7 @@ const TabsCard = ({ activeTab, onTabChange, tabCounts }) => {
               : 'bg-red text-[#213547] hover:bg-[#213547]/10'
             }
           `}
-          style={{ backgroundColor: activeTab === tab.id ? '#213547' : '#7e96ac' }}
+          style={{ backgroundColor: activeTab === tab.id ? '#213547' : '#52718d' }}
         >
           {tab.label}
           <span className={`
