@@ -53,6 +53,8 @@ const ApplicationsTable = () => {
   const [termFilter, setTermFilter] = useState(0)
   const [dateRange, setDateRange] = useState({ from: '', to: '' })
   const [activeTab, setActiveTab] = useState('5') // Default to All applications
+  const [salesChannel, setSalesChannel] = useState('')
+  const [sumAssuredFilter, setSumAssuredFilter] = useState(0)
 
   const tabCounts = useMemo(() => {
     return applications.reduce((acc, app) => {
@@ -98,9 +100,22 @@ const ApplicationsTable = () => {
         }
       }
 
+      // Sales channel filter
+      if (salesChannel && app.commissionstructure !== salesChannel) {
+        return false
+      }
+
+      // Sum assured filter
+      if (sumAssuredFilter > 0) {
+        const sumAssured = parseFloat(app.sumassured)
+        if (sumAssured < sumAssuredFilter) {
+          return false
+        }
+      }
+
       return true
     })
-  }, [applications, activeTab, searchTerm, termFilter, dateRange])
+  }, [applications, activeTab, searchTerm, termFilter, dateRange, salesChannel, sumAssuredFilter])
 
   console.log('Filtered Applications:', filteredApplications)
 
@@ -121,7 +136,7 @@ const ApplicationsTable = () => {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex gap-4">
       <FilterCard 
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
@@ -129,9 +144,12 @@ const ApplicationsTable = () => {
         onTermFilterChange={setTermFilter}
         dateRange={dateRange}
         onDateRangeChange={setDateRange}
+        salesChannel={salesChannel}
+        onSalesChannelChange={setSalesChannel}
+        sumAssuredFilter={sumAssuredFilter}
+        onSumAssuredChange={setSumAssuredFilter}
       />
 
-      {/* Table Card with Tabs */}
       <div className="flex-1 flex flex-col min-h-0">
         <TabsCard 
           activeTab={activeTab} 
