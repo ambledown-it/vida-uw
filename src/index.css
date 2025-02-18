@@ -251,3 +251,34 @@ tr.hover-effect:nth-child(odd) {
 .drawer-exit-button.button {
   background-color: transparent;
 }
+
+/* Drawer Table Styles */
+.drawer-table {
+  width: 100%;
+  background-color: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+.drawer-table tbody tr:nth-child(odd) {
+  background-color: #f9fafb;
+}
+
+.drawer-table tbody tr:nth-child(even) {
+  background-color: white;
+}
+
+.drawer-table td {
+  padding: 0.75rem 1rem;
+}
+
+.drawer-table td:first-child {
+  font-weight: 600;
+  color: #213547;
+  width: 33.333333%;
+}
+
+.drawer-table td:last-child {
+  color: #4b5563;
+}

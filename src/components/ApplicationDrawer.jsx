@@ -1,6 +1,19 @@
 import { X } from 'lucide-react'
+import { useEffect } from 'react'
+import { useSingleApplication } from '../contexts/SingleApplicationContext'
+import ApplicantDetails from './ApplicantDetails'
+import PolicyDetails from './PolicyDetails'
+import MagnumDetails from './MagnumDetails'
 
 const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNumber }) => {
+  const { applicationDetails, fetchApplicationDetails } = useSingleApplication()
+
+  useEffect(() => {
+    if (isOpen && applicationId) {
+      fetchApplicationDetails(applicationId)
+    }
+  }, [isOpen, applicationId])
+
   return (
     <div 
       className={`
@@ -32,7 +45,13 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
 
       {/* Content */}
       <div className="p-6">
-        {/* Drawer content will go here */}
+        {applicationDetails && (
+          <>
+            <PolicyDetails policyData={applicationDetails[0]} />
+            <ApplicantDetails applicantData={applicationDetails[0]} />
+            <MagnumDetails magnumData={applicationDetails[0]} />
+          </>
+        )}
       </div>
     </div>
   )
