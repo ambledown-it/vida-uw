@@ -181,8 +181,8 @@ tr.hover-effect:nth-child(odd) {
 .table-action-button {
   width: 2rem;
   height: 2rem;
-  border-radius: 9999px;
-  background-color: #93b244;
+  color: #213547;
+  background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,12 +193,12 @@ tr.hover-effect:nth-child(odd) {
 }
 
 .table-action-button:hover {
-  background-color: #839f3c;
+  background-color:transparent;
 }
 
 .table-action-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #93b244;
+  box-shadow: none;
 }
 
 /* Override any default button styles */
@@ -286,20 +286,21 @@ tr.hover-effect:nth-child(odd) {
 /* Drawer Button Styles */
 .drawer-action-button {
   display: flex;
-  height: 2.5rem;
+  height: 4rem;
   align-items: center;
   justify-content: center;
   padding: 0 1rem;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  color: #213547;
+  color:  #white;
   transition: all 0.2s ease-in-out;
-  border: none;
+  border: 2px solid #213547;
   outline: none;
+  background-color:  #213547;
 }
 
 .drawer-action-button:hover {
-  background-color: #f3f4f6;
+  background-color: #C5D796;
 }
 
 .drawer-action-button:focus {

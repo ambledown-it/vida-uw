@@ -51,7 +51,10 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
           <>
             <div className="px-6 py-4 bg-white">
               <PolicyDetails policyData={applicationDetails[0]} />
-              <PremiumDetails premiumData={applicationDetails[0]} />
+              <PremiumDetails 
+                premiumData={applicationDetails[0]} 
+                magnumDecision={applicationDetails[0].decision}
+              />
             </div>
             <div className="px-6 py-4 bg-gray-50">
               <ApplicantDetails applicantData={applicationDetails[0]} />
@@ -64,7 +67,7 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
       </div>
 
       {/* Buttons */}
-      <DrawerButtons />
+      <DrawerButtons magnumDecision={applicationDetails?.[0]?.decision} />
     </div>
   )
 }

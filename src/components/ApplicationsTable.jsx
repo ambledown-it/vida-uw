@@ -7,7 +7,7 @@ import {
   AlertCircle, 
   CheckCircle2, 
   XCircle,
-  Plus
+  SquareArrowOutUpRight
 } from 'lucide-react'
 import ApplicationDrawer from './ApplicationDrawer'
 
@@ -259,7 +259,7 @@ const ApplicationsTable = () => {
                           className="table-action-button"
                           onClick={() => handleActionClick(app)}
                         >
-                          <Plus className="w-5 h-5 text-white" />
+                          <SquareArrowOutUpRight className="w-5 h-5 text-[#213547]" />
                         </button>
                       </div>
                     </td>

@@ -1,14 +1,35 @@
-import { ChevronDown, ChevronUp, Wallet, TrendingUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Wallet, TrendingUp, Ban } from 'lucide-react'
 import { useState } from 'react'
 
-const PremiumDetails = ({ premiumData }) => {
+const PremiumDetails = ({ premiumData, magnumDecision }) => {
   const [isPremiumExpanded, setIsPremiumExpanded] = useState(false)
+  const isPremiumAvailable = magnumDecision?.toLowerCase() === 'accept'
 
   const formatCurrency = (amount) => {
     return `R ${parseFloat(amount).toLocaleString()}`
   }
 
   const premiumSchedule = JSON.parse(premiumData.premium_schedule || '{}')
+
+  if (!isPremiumAvailable) {
+    return (
+      <div className="mt-4">
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-lg">
+              <Ban className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-sm text-[#213547]/70">Premium Status</div>
+              <div className="text-xl font-bold">
+                Premium Unavailable
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="mt-4">
@@ -36,7 +57,7 @@ const PremiumDetails = ({ premiumData }) => {
           </div>
           <div className="flex-1 text-left">
             <div className="font-medium text-[#213547]">Premium Schedule</div>
-            <div className="text-sm text-[#213547]/70">View total yearly premiums</div>
+            <div className="text-sm text-[#213547]/70">View total  yearly premiums</div>
           </div>
           {isPremiumExpanded ? (
             <ChevronUp className="w-5 h-5 text-[#213547]" />
