@@ -2,7 +2,7 @@ import { FileText, Phone, PenLine } from 'lucide-react'
 import { useState } from 'react'
 import ManualUnderwritingDrawer from './ManualUnderwritingDrawer'
 
-const DrawerButtons = ({ magnumDecision }) => {
+const DrawerButtons = ({ magnumDecision, applicationId }) => {
   const [isManualUnderwritingOpen, setIsManualUnderwritingOpen] = useState(false)
   const isManualUnderwritingEnabled = magnumDecision?.toLowerCase() === 'refer'
 
@@ -40,6 +40,7 @@ const DrawerButtons = ({ magnumDecision }) => {
       <ManualUnderwritingDrawer 
         isOpen={isManualUnderwritingOpen}
         onClose={() => setIsManualUnderwritingOpen(false)}
+        applicationId={applicationId}
       />
     </>
   )

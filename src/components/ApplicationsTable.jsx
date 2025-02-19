@@ -10,6 +10,7 @@ import {
   SquareArrowOutUpRight
 } from 'lucide-react'
 import ApplicationDrawer from './ApplicationDrawer'
+import StatusBadge from './StatusBadge'
 
 const StatusIcon = ({ status }) => {
   const iconClass = "w-5 h-5"
@@ -43,9 +44,11 @@ const CommissionBadge = ({ value }) => {
   }
 
   return (
-    <span className={`px-2 py-1 text-xs font-medium rounded-r-lg ${badgeColor}`}>
-      {badgeContent}
-    </span>
+    <div className="flex justify-center">
+      <span className={`px-2 py-1 text-xs font-medium rounded-lg ${badgeColor}`}>
+        {badgeContent}
+      </span>
+    </div>
   )
 }
 
@@ -173,12 +176,12 @@ const ApplicationsTable = () => {
             <table className="w-full table-fixed">
               <colgroup>
                 <col className="w-[5%]" />
-                <col className="w-[15%]" />
-                <col className="w-[15%]" />
+                <col className="w-[8%]" />
+                <col className="w-[17%]" />
                 <col className="w-[15%]" />
                 <col className="w-[15%]" />
                 <col className="w-[10%]" />
-                <col className="w-[10%]" />
+                <col className="w-[15%]" />
                 <col className="w-[10%]" />
                 <col className="w-[5%]" />
               </colgroup>
@@ -221,13 +224,13 @@ const ApplicationsTable = () => {
             <table className="w-full table-fixed">
               <colgroup>
                 <col className="w-[5%]" />
-                <col className="w-[15%]" />
-                <col className="w-[15%]" />
+                <col className="w-[8%]" />
+                <col className="w-[17%]" />
                 <col className="w-[15%]" />
                 <col className="w-[15%]" />
                 <col className="w-[10%]" />
                 <col className="w-[10%]" />
-                <col className="w-[10%]" />
+                <col className="w-[15%]" />
                 <col className="w-[5%]" />
               </colgroup>
               <tbody>
@@ -241,10 +244,10 @@ const ApplicationsTable = () => {
                   >
                     <td className="px-6 py-4">
                       <div className="flex justify-center">
-                        <StatusIcon status={app.detailedstatus} />
+                        <StatusBadge status={app.detailedstatus} />
                       </div>
                     </td>
-                    <td className="px-6 py-4">{app.appid}</td>
+                    <td className="px-6 py-4 font-mono text-center w-[80px]">{app.appid}</td>
                     <td className="px-6 py-4">{`${app.firstnames} ${app.surname}`}</td>
                     <td className="px-6 py-4">{app.idnumber}</td>
                     <td className="px-6 py-4">{new Date(app.datecreated).toLocaleDateString()}</td>

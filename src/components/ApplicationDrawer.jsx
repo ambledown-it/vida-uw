@@ -77,7 +77,10 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
         </div>
 
         {/* Buttons */}
-        <DrawerButtons magnumDecision={applicationDetails?.[0]?.decision} />
+        <DrawerButtons 
+          magnumDecision={applicationDetails?.[0]?.decision}
+          applicationId={applicationId}
+        />
       </div>
     </>
   )

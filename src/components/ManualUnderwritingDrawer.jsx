@@ -1,20 +1,28 @@
 import { X, CheckCircle2, XCircle, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { useManualUnderwriting } from '../contexts/ManualUnderwritingContext'
 
-const ManualUnderwritingDrawer = ({ isOpen, onClose }) => {
+const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
   const [decision, setDecision] = useState('')
   const [hasAdjustments, setHasAdjustments] = useState(false)
   const [hasExclusions, setHasExclusions] = useState(false)
   const [hasNotes, setHasNotes] = useState(false)
   const [adjustments, setAdjustments] = useState([
-    { id: 1, riskArea: '', type: '', value: '' }
+    { id: 1, type: '', value: '' }
   ])
   const [exclusions, setExclusions] = useState([
     { id: 1, exclusion: '' }
   ])
   const [notes, setNotes] = useState('')
+  const { submitManualUnderwriting } = useManualUnderwriting()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleAdjustmentChange = (id, field, value) => {
+    if (field === 'value') {
+      const numValue = parseFloat(value)
+      if (isNaN(numValue) || numValue < 0 || numValue > 100) return
+    }
+    
     setAdjustments(current =>
       current.map(adj => 
         adj.id === id ? { ...adj, [field]: value } : adj
@@ -24,7 +32,7 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose }) => {
 
   const addAdjustment = () => {
     const newId = Math.max(...adjustments.map(adj => adj.id)) + 1
-    setAdjustments(current => [...current, { id: newId, riskArea: '', type: '', value: '' }])
+    setAdjustments(current => [...current, { id: newId, type: '', value: '' }])
   }
 
   const removeAdjustment = (id) => {
@@ -46,6 +54,29 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose }) => {
 
   const removeExclusion = (id) => {
     setExclusions(current => current.filter(excl => excl.id !== id))
+  }
+
+  const handleSubmit = async () => {
+    if (!decision) return
+
+    try {
+      setIsSubmitting(true)
+
+      const data = {
+        decision,
+        adjustments: hasAdjustments ? adjustments : null,
+        exclusions: hasExclusions ? exclusions : null,
+        notes: hasNotes ? notes : null
+      }
+
+      await submitManualUnderwriting(applicationId, data)
+      onClose()
+    } catch (error) {
+      // Handle error (you might want to show an error message to the user)
+      console.error('Failed to submit:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -138,22 +169,14 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose }) => {
                     {hasAdjustments && (
                       <div className="space-y-4">
                         {/* Adjustments Table Header */}
-                        <div className="grid grid-cols-3 gap-4 px-3 py-2 bg-gray-50 rounded-t-lg">
-                          <div className="text-xs font-medium text-[#213547]">Risk Area</div>
+                        <div className="grid grid-cols-2 gap-4 px-3 py-2 bg-gray-50 rounded-t-lg">
                           <div className="text-xs font-medium text-[#213547]">Type</div>
                           <div className="text-xs font-medium text-[#213547]">Value (%)</div>
                         </div>
 
                         {/* Adjustment Rows */}
                         {adjustments.map((adjustment) => (
-                          <div key={adjustment.id} className="grid grid-cols-3 gap-4 items-center">
-                            <input
-                              type="text"
-                              value={adjustment.riskArea}
-                              onChange={(e) => handleAdjustmentChange(adjustment.id, 'riskArea', e.target.value)}
-                              className="p-2 text-sm border border-gray-200 rounded-lg"
-                              placeholder="Enter risk area..."
-                            />
+                          <div key={adjustment.id} className="grid grid-cols-2 gap-4 items-center">
                             <select
                               value={adjustment.type}
                               onChange={(e) => handleAdjustmentChange(adjustment.id, 'type', e.target.value)}
@@ -170,6 +193,9 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose }) => {
                                 onChange={(e) => handleAdjustmentChange(adjustment.id, 'value', e.target.value)}
                                 className="p-2 text-sm border border-gray-200 rounded-lg w-full"
                                 placeholder="Enter value..."
+                                min="0"
+                                max="100"
+                                step="1"
                               />
                               {adjustments.length > 1 && (
                                 <button
@@ -308,8 +334,15 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose }) => {
           <div className="border-t border-gray-200 p-0 bg-white">
             <button
               className="drawer-action-button w-full"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
             >
-              <span>Submit {decision === 'ACCEPT' ? 'Acceptance' : 'Rejection'}</span>
+              <span>
+                {isSubmitting 
+                  ? 'Submitting...' 
+                  : `Submit ${decision === 'ACCEPT' ? 'Acceptance' : 'Rejection'}`
+                }
+              </span>
             </button>
           </div>
         )}
