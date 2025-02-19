@@ -2,9 +2,12 @@ import { FileText, Phone, PenLine } from 'lucide-react'
 import { useState } from 'react'
 import ManualUnderwritingDrawer from './ManualUnderwritingDrawer'
 
-const DrawerButtons = ({ magnumDecision, applicationId }) => {
+const DrawerButtons = ({ magnumDecision, applicationId, applicationDetails }) => {
   const [isManualUnderwritingOpen, setIsManualUnderwritingOpen] = useState(false)
   const isManualUnderwritingEnabled = magnumDecision?.toLowerCase() === 'refer'
+  
+  // Check if manual underwriting was previously performed
+  const hasManualUnderwriting = applicationDetails?.manualuwid != null
 
   return (
     <>
@@ -31,7 +34,9 @@ const DrawerButtons = ({ magnumDecision, applicationId }) => {
           >
             <div className="flex items-center gap-2">
               <PenLine className="w-4 h-6" />
-              <span className='font-bold'>Manual Underwriting</span>
+              <span className='font-bold'>
+                {hasManualUnderwriting ? 'Override Manual Underwriting' : 'Manual Underwriting'}
+              </span>
             </div>
           </button>
         </div>
@@ -41,6 +46,7 @@ const DrawerButtons = ({ magnumDecision, applicationId }) => {
         isOpen={isManualUnderwritingOpen}
         onClose={() => setIsManualUnderwritingOpen(false)}
         applicationId={applicationId}
+        isOverride={hasManualUnderwriting}
       />
     </>
   )

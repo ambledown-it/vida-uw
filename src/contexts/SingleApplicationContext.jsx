@@ -25,6 +25,7 @@ export function SingleApplicationProvider({ children }) {
         }
       )
 
+      console.log('Application details response:', response.data)
       setApplicationDetails(response.data)
       setError(null)
     } catch (err) {

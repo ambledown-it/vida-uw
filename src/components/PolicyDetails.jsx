@@ -1,4 +1,4 @@
-import { CheckCircle2, XCircle, AlertCircle, Banknote, Clock, Briefcase } from 'lucide-react'
+import { CheckCircle2, XCircle, AlertCircle, Banknote, Clock, Briefcase, PenLine } from 'lucide-react'
 
 const PolicyDetails = ({ policyData }) => {
   const formatCurrency = (amount) => {
@@ -81,19 +81,38 @@ const PolicyDetails = ({ policyData }) => {
     }
 
     return (
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div className={`h-1 ${getDecisionHighlightColor(decision)}`} />
-        <div className={`p-4 flex items-center gap-3`}>
-          {getDecisionIcon(decision)}
-          <div className="flex-1">
-            <h3 className="text-lg font-bold mb-1 text-[#213547]">
-              Magnum Decision: {formatDecision(decision)}
-            </h3>
-            <p className="text-sm text-[#213547]/70">
-              {getDecisionMessage(decision)}
-            </p>
+      <div className="space-y-2">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className={`h-1 ${getDecisionHighlightColor(decision)}`} />
+          <div className={`p-4 flex items-center gap-3`}>
+            {getDecisionIcon(decision)}
+            <div className="flex-1">
+              <h3 className="text-lg font-bold mb-1 text-[#213547]">
+                Magnum Decision: {formatDecision(decision)}
+              </h3>
+              <p className="text-sm text-[#213547]/70">
+                {getDecisionMessage(decision)}
+              </p>
+            </div>
           </div>
         </div>
+
+        {policyData.manualuwid && (
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className={`h-1 ${getDecisionHighlightColor(policyData.manual_decision)}`} />
+            <div className={`p-4 flex items-center gap-3`}>
+              {getDecisionIcon(policyData.manual_decision)}
+              <div className="flex-1">
+                <h3 className="text-lg font-bold mb-1 text-[#213547]">
+                  Manual Underwriting Decision: {formatDecision(policyData.manual_decision)}
+                </h3>
+                <p className="text-sm text-[#213547]/70">
+                  {getDecisionMessage(policyData.manual_decision)}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
