@@ -190,7 +190,7 @@ const ApplicationsTable = () => {
         />
         <div className="flex-1 bg-white rounded-b-lg shadow-sm flex flex-col min-h-0">
           {/* Fixed Header */}
-          <div className="bg-[#213547] rounded-tr-lg">
+          <div className="bg-[#213547] rounded-lg">
             <table className="w-full table-fixed">
               <colgroup>
                 <col className="w-[6%]" />
@@ -201,40 +201,36 @@ const ApplicationsTable = () => {
                 <col className="w-[15%]" />
                 <col className="w-[10%]" />
                 <col className="w-[10%]" />
-                <col className="w-[10%]" />
-                <col className="w-[5%]" />
+                <col className="w-[15%]" />
               </colgroup>
               <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white first:rounded-tl-lg">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white first:rounded-tr-lg">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white">
                     {/* Empty header for Manual UW icon */}
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white">
                     Application ID
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white">
                     Applicant Name
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white">
                     ID Number
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white">
                     Date Created
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white">
                     Term
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white">
                     Sum Assured
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white last:rounded-tr-lg">
+                  <th className="px-6 py-3 text-center text-sm font-bold text-white last:rounded-tr-lg">
                     Sales Channel
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-white last:rounded-tr-lg">
-                    {/* Empty header for action buttons */}
                   </th>
                 </tr>
               </thead>
@@ -242,7 +238,7 @@ const ApplicationsTable = () => {
           </div>
 
           {/* Scrollable Body */}
-          <div className="flex-1 overflow-auto min-h-0 rounded-b-lg">
+          <div className="flex-1 overflow-auto min-h-0 rounded-b-lg py-4">
             <table className="w-full table-fixed">
               <colgroup>
                 <col className="w-[6%]" />
@@ -253,55 +249,84 @@ const ApplicationsTable = () => {
                 <col className="w-[15%]" />
                 <col className="w-[10%]" />
                 <col className="w-[10%]" />
-                <col className="w-[10%]" />
-                <col className="w-[5%]" />
+                <col className="w-[15%]" />
               </colgroup>
               <tbody>
-                {filteredApplications.map((app, index) => (
-                  <tr 
-                    key={`${app.appid}-${index}`}
-                    className={`
-                      hover-effect
-                      ${index === filteredApplications.length - 1 ? 'last:border-b-0' : ''}
-                    `}
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex justify-center">
-                        <StatusBadge status={app.detailedstatus} />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex justify-center">
-                        {app.manualuwid && (
-                          <PenLine className="w-4 h-4 text-[#213547]" />
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <span className="text-sm text-gray-900">
-                        {app.appid}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">{`${app.firstnames} ${app.surname}`}</td>
-                    <td className="px-6 py-4">{app.idnumber}</td>
-                    <td className="px-6 py-4">{new Date(app.datecreated).toLocaleDateString()}</td>
-                    <td className="px-6 py-4">{app.term/12} years</td>
-                    <td className="px-6 py-4">R {parseFloat(app.sumassured).toLocaleString()}</td>
-                    <td className="px-6 py-4">
-                      <CommissionBadge value={app.commissionstructure} />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex justify-center">
-                        <button 
-                          className="table-action-button"
-                          onClick={() => handleActionClick(app)}
-                        >
-                          <SquareArrowOutUpRight className="w-5 h-5 text-[#213547]" />
-                        </button>
+                {filteredApplications.length > 0 ? (
+                  filteredApplications.map((app, index) => (
+                    <tr 
+                      key={`${app.appid}-${index}`}
+                      onClick={() => handleActionClick(app)}
+                      className={`
+                        hover-effect
+                        ${index === filteredApplications.length - 1 ? 'last:border-b-0' : ''}
+                        cursor-pointer
+                      `}
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          <StatusBadge status={app.detailedstatus} />
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          {app.manualuwid && (
+                            <PenLine className="w-4 h-4 text-[#213547]" />
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          <span className="text-sm text-gray-900">
+                            {app.appid}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          {`${app.firstnames} ${app.surname}`}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          {app.idnumber}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          {new Date(app.datecreated).toLocaleDateString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          {app.term/12} years
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          R {parseFloat(app.sumassured).toLocaleString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center">
+                          <CommissionBadge value={app.commissionstructure} />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td 
+                      colSpan="9" 
+                      className="px-6 py-8 text-center text-gray-500"
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-lg">No Applications Found</span>
+                        <span className="text-sm">Please try adjusting your search criteria</span>
                       </div>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

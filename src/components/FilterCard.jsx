@@ -60,7 +60,7 @@ const FilterCard = ({
       </div>
 
       {/* Filter Content */}
-      <div className="p-6 divide-y divide-gray-200">
+      <div className="p-6 divide-y divide-gray-50">
       
         {/* Search Filter */}
         <SearchFilter 
@@ -81,6 +81,22 @@ const FilterCard = ({
             <option value="">All Channels</option>
             <option value="1">Brokerage</option>
             <option value="2">Call Center</option>
+          </select>
+        </div>
+
+        {/* Manual Underwriting Filter - Moved here */}
+        <div className="py-6">
+          <label className="block text-sm font-bold text-[#213547] mb-2">
+            Manual Underwriting
+          </label>
+          <select
+            value={manualUwFilter}
+            onChange={(e) => onManualUwFilterChange(e.target.value)}
+            className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm"
+          >
+            <option value="">All Applications</option>
+            <option value="yes">Manually Underwritten</option>
+            <option value="no">Not Manually Underwritten</option>
           </select>
         </div>
 
@@ -157,22 +173,6 @@ const FilterCard = ({
             />
             <span className="text-xs text-gray-500">5M</span>
           </div>
-        </div>
-
-        {/* Manual Underwriting Filter - Now last */}
-        <div className="py-6">
-          <label className="block text-sm font-bold text-[#213547] mb-2">
-            Manual Underwriting
-          </label>
-          <select
-            value={manualUwFilter}
-            onChange={(e) => onManualUwFilterChange(e.target.value)}
-            className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm"
-          >
-            <option value="">All Applications</option>
-            <option value="yes">Manually Underwritten</option>
-            <option value="no">Not Manually Underwritten</option>
-          </select>
         </div>
       </div>
     </div>

@@ -27,16 +27,14 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
       )}
 
       {/* Drawer */}
-      <div 
-        className={`
-          fixed top-0 right-0 h-full w-[45%] bg-white
-          transform transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-x-0' : 'translate-x-full'}
-          z-[60] shadow-lg
-        `}
-      >
-        {/* Header */}
-        <div className="bg-[#213547] h-24 px-6 flex items-center"       style={{ backgroundImage: 'url("/bg-header.svg")' }}>
+      <div className={`
+        fixed inset-y-0 right-0 w-[45%] bg-gray-50 shadow-xl transform 
+        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
+        transition-transform duration-300 ease-in-out z-50
+        flex flex-col
+      `}>
+        {/* Header - fixed at top */}
+        <div className="bg-[#213547] h-24 px-6 flex items-center shrink-0" style={{ backgroundImage: 'url("/bg-header.svg")' }}>
           <button
             onClick={onClose}
             className="drawer-exit-button text-white hover:text-gray-200 mr-6"
@@ -55,33 +53,37 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
           </div>
         </div>
 
-        {/* Content */}
-        <div className="divide-y divide-gray-200 pb-24">
-          {applicationDetails && (
-            <>
-              <div className="px-6 py-4 bg-white">
-                <PolicyDetails policyData={applicationDetails[0]} />
-                <PremiumDetails 
-                  premiumData={applicationDetails[0]} 
-                  magnumDecision={applicationDetails[0].decision}
-                />
-              </div>
-              <div className="px-6 py-4 bg-gray-50">
-                <ApplicantDetails applicantData={applicationDetails[0]} />
-              </div>
-              <div className="px-6 py-4 bg-white">
-                <MagnumDetails magnumData={applicationDetails[0]} />
-              </div>
-            </>
-          )}
+        {/* Content - scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="divide-y divide-gray-200 pb-24">
+            {applicationDetails && (
+              <>
+                <div className="px-6 py-4 bg-white">
+                  <PolicyDetails policyData={applicationDetails[0]} />
+                  <PremiumDetails 
+                    premiumData={applicationDetails[0]} 
+                    magnumDecision={applicationDetails[0].decision}
+                  />
+                </div>
+                <div className="px-6 py-4 bg-gray-50">
+                  <ApplicantDetails applicantData={applicationDetails[0]} />
+                </div>
+                <div className="px-6 py-4 bg-white">
+                  <MagnumDetails magnumData={applicationDetails[0]} />
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
-        {/* Buttons */}
-        <DrawerButtons 
-          magnumDecision={applicationDetails?.[0]?.decision}
-          applicationId={applicationId}
-          applicationDetails={applicationDetails?.[0]}
-        />
+        {/* Buttons - fixed at bottom */}
+        <div className="shrink-0">
+          <DrawerButtons 
+            magnumDecision={applicationDetails?.[0]?.decision}
+            applicationId={applicationId}
+            applicationDetails={applicationDetails?.[0]}
+          />
+        </div>
       </div>
     </>
   )
