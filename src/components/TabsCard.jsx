@@ -3,11 +3,19 @@ const TabsCard = ({ activeTab, onTabChange, tabCounts }) => {
     { id: '5', label: 'All' },
     { id: '1', label: 'Open' },
     { id: '2', label: 'Referred' },
-    { id: '3', label: 'Closed' }
+    { id: '3', label: 'Closed' }  // This will show both status 3 and 4
   ]
 
   // Calculate total count for "All" tab
   const totalCount = Object.values(tabCounts || {}).reduce((sum, count) => sum + count, 0)
+
+  // Calculate combined count for Closed tab (status 3 and 4)
+  const getTabCount = (tabId) => {
+    if (tabId === '3') {
+      return (tabCounts?.['3'] || 0) + (tabCounts?.['4'] || 0)
+    }
+    return tabCounts?.[tabId] || 0
+  }
 
   return (
     <div className="flex">
@@ -35,7 +43,7 @@ const TabsCard = ({ activeTab, onTabChange, tabCounts }) => {
               : 'bg-[#213547]/10'
             }
           `}>
-            {tab.id === '5' ? totalCount : tabCounts?.[tab.id] || 0}
+            {tab.id === '5' ? totalCount : getTabCount(tab.id)}
           </span>
         </button>
       ))}

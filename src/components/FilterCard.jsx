@@ -1,4 +1,4 @@
-import { Search as SearchIcon } from 'lucide-react'
+import { Search as SearchIcon, RotateCcw } from 'lucide-react'
 
 const FilterCard = ({ 
   searchTerm, 
@@ -28,12 +28,37 @@ const FilterCard = ({
     return `R ${parseInt(value).toLocaleString()}`
   }
 
+  const handleReset = () => {
+    onSearchChange('')
+    onTermFilterChange(0)
+    onDateRangeChange({ from: '', to: '' })
+    onSalesChannelChange('')
+    onSumAssuredChange(0)
+  }
+
+  const getSliderProgress = (value, min, max) => {
+    return ((value - min) / (max - min)) * 100
+  }
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm w-[300px] flex-shrink-0">
-      <div className="flex flex-col gap-8">
+    <div className="w-80 bg-white rounded-lg shadow-sm">
+      {/* Header */}
+      <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <h2 className="text-lg font-bold text-[#213547]">Filters</h2>
+        <button
+          onClick={handleReset}
+          className="reset-filter-button"
+          title="Reset Filters"
+        >
+          <RotateCcw />
+        </button>
+      </div>
+
+      {/* Filter Content */}
+      <div className="p-6 divide-y divide-gray-200">
         {/* Search Filter */}
-        <div>
-          <label className="block text-sm font-medium text-[#213547] mb-2">
+        <div className="py-6 first:pt-0">
+          <label className="block text-sm font-bold text-[#213547] mb-2">
             Search
           </label>
           <div className="relative">
@@ -43,20 +68,20 @@ const FilterCard = ({
               placeholder="Search by name or ID number..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#213547] focus:border-transparent"
+              className="pl-10 border-2 border-gray-200 rounded-lg"
             />
           </div>
         </div>
 
         {/* Sales Channel Filter */}
-        <div>
-          <label className="block text-sm font-medium text-[#213547] mb-2">
+        <div className="py-6">
+          <label className="block text-sm font-bold text-[#213547] mb-2">
             Sales Channel
           </label>
           <select
             value={salesChannel}
             onChange={(e) => onSalesChannelChange(e.target.value)}
-            className="w-full px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#213547] focus:border-transparent"
+            className="w-full border-2 border-gray-200 rounded-lg"
           >
             <option value="">All Channels</option>
             <option value="1">Brokerage</option>
@@ -65,8 +90,8 @@ const FilterCard = ({
         </div>
 
         {/* Date Range Filter */}
-        <div>
-          <label className="block text-sm font-medium text-[#213547] mb-2">
+        <div className="py-6">
+          <label className="block text-sm font-bold text-[#213547] mb-2">
             Date Created Range
           </label>
           <div className="flex flex-col gap-2">
@@ -74,23 +99,23 @@ const FilterCard = ({
               type="date"
               value={dateRange.from}
               onChange={handleDateChange('from')}
-              className="w-full px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#213547] focus:border-transparent"
+              className="border-2 border-gray-200 rounded-lg"
               placeholder="From"
             />
             <input
               type="date"
               value={dateRange.to}
               onChange={handleDateChange('to')}
-              className="w-full px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#213547] focus:border-transparent"
+              className="border-2 border-gray-200 rounded-lg"
               placeholder="To"
             />
           </div>
         </div>
 
         {/* Term Filter */}
-        <div>
+        <div className="py-6">
           <div className="flex justify-between items-center mb-2">
-            <label className="block text-sm font-medium text-[#213547]">
+            <label className="block text-sm font-bold text-[#213547]">
               Term (Years)
             </label>
             <span className="text-sm text-[#213547] font-medium">
@@ -106,31 +131,17 @@ const FilterCard = ({
               step="1"
               value={termFilter}
               onChange={handleTermChange}
-              className="
-                flex-1 h-2 rounded-lg appearance-none cursor-pointer
-                bg-gray-200
-                [&::-webkit-slider-thumb]:appearance-none
-                [&::-webkit-slider-thumb]:w-4
-                [&::-webkit-slider-thumb]:h-4
-                [&::-webkit-slider-thumb]:rounded-full
-                [&::-webkit-slider-thumb]:bg-[#213547]
-                [&::-webkit-slider-thumb]:cursor-pointer
-                [&::-moz-range-thumb]:w-4
-                [&::-moz-range-thumb]:h-4
-                [&::-moz-range-thumb]:rounded-full
-                [&::-moz-range-thumb]:bg-[#213547]
-                [&::-moz-range-thumb]:border-0
-                [&::-moz-range-thumb]:cursor-pointer
-              "
+              className="slider-track"
+              style={{ '--range-progress': `${getSliderProgress(termFilter, 0, 20)}%` }}
             />
             <span className="text-xs text-gray-500">20y</span>
           </div>
         </div>
 
         {/* Sum Assured Filter */}
-        <div>
+        <div className="py-6">
           <div className="flex justify-between items-center mb-2">
-            <label className="block text-sm font-medium text-[#213547]">
+            <label className="block text-sm font-bold text-[#213547]">
               Minimum Sum Assured
             </label>
             <span className="text-sm text-[#213547] font-medium">
@@ -146,22 +157,8 @@ const FilterCard = ({
               step="100000"
               value={sumAssuredFilter}
               onChange={(e) => onSumAssuredChange(Number(e.target.value))}
-              className="
-                flex-1 h-2 rounded-lg appearance-none cursor-pointer
-                bg-gray-200
-                [&::-webkit-slider-thumb]:appearance-none
-                [&::-webkit-slider-thumb]:w-4
-                [&::-webkit-slider-thumb]:h-4
-                [&::-webkit-slider-thumb]:rounded-full
-                [&::-webkit-slider-thumb]:bg-[#213547]
-                [&::-webkit-slider-thumb]:cursor-pointer
-                [&::-moz-range-thumb]:w-4
-                [&::-moz-range-thumb]:h-4
-                [&::-moz-range-thumb]:rounded-full
-                [&::-moz-range-thumb]:bg-[#213547]
-                [&::-moz-range-thumb]:border-0
-                [&::-moz-range-thumb]:cursor-pointer
-              "
+              className="slider-track"
+              style={{ '--range-progress': `${getSliderProgress(sumAssuredFilter, 0, 5000000)}%` }}
             />
             <span className="text-xs text-gray-500">5M</span>
           </div>

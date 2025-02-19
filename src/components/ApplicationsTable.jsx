@@ -72,8 +72,15 @@ const ApplicationsTable = () => {
   const filteredApplications = useMemo(() => {
     return applications.filter(app => {
       // Status tab filter - skip for "All" tab
-      if (activeTab !== '5' && app.statusid !== activeTab) {
-        return false
+      if (activeTab !== '5') {
+        if (activeTab === '3') {
+          // Show both status 3 and 4 in Closed tab
+          if (app.statusid !== '3' && app.statusid !== '4') {
+            return false
+          }
+        } else if (app.statusid !== activeTab) {
+          return false
+        }
       }
 
       // Search term filter
@@ -175,13 +182,13 @@ const ApplicationsTable = () => {
           <div className="bg-[#213547] rounded-tr-lg">
             <table className="w-full table-fixed">
               <colgroup>
-                <col className="w-[5%]" />
+                <col className="w-[6%]" />
                 <col className="w-[8%]" />
                 <col className="w-[17%]" />
                 <col className="w-[15%]" />
                 <col className="w-[15%]" />
                 <col className="w-[10%]" />
-                <col className="w-[15%]" />
+                <col className="w-[10%]" />
                 <col className="w-[10%]" />
                 <col className="w-[5%]" />
               </colgroup>
@@ -223,14 +230,14 @@ const ApplicationsTable = () => {
           <div className="flex-1 overflow-auto min-h-0 rounded-b-lg">
             <table className="w-full table-fixed">
               <colgroup>
-                <col className="w-[5%]" />
+                <col className="w-[6%]" />
                 <col className="w-[8%]" />
                 <col className="w-[17%]" />
                 <col className="w-[15%]" />
                 <col className="w-[15%]" />
                 <col className="w-[10%]" />
                 <col className="w-[10%]" />
-                <col className="w-[15%]" />
+                <col className="w-[10%]" />
                 <col className="w-[5%]" />
               </colgroup>
               <tbody>
@@ -247,7 +254,7 @@ const ApplicationsTable = () => {
                         <StatusBadge status={app.detailedstatus} />
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-mono text-center w-[80px]">{app.appid}</td>
+                    <td className="px-6 py-4 text-center w-[80px]">{app.appid}</td>
                     <td className="px-6 py-4">{`${app.firstnames} ${app.surname}`}</td>
                     <td className="px-6 py-4">{app.idnumber}</td>
                     <td className="px-6 py-4">{new Date(app.datecreated).toLocaleDateString()}</td>

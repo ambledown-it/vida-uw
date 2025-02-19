@@ -502,3 +502,118 @@ tr.hover-effect:nth-child(odd) {
     opacity: 1;
   }
 }
+
+/* Reset Button Style */
+.reset-filter-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: #213547;
+  transition: all 0.2s ease-in-out;
+}
+
+.reset-filter-button:hover {
+  background-color: transparent;
+  color: #93b244;
+}
+
+.reset-filter-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.reset-filter-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Input Styles */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  border-color: #e5e7eb;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #213547;
+}
+
+/* For search inputs with icons */
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input {
+  padding-left: 2.5rem;
+}
+
+.input-with-icon svg {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Slider Styles */
+.slider-track {
+  flex: 1;
+  height: 0.5rem;
+  appearance: none;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, #213547 0%, #213547 var(--range-progress), #e5e7eb var(--range-progress), #e5e7eb 100%);
+  cursor: pointer;
+}
+
+.slider-track::-webkit-slider-thumb {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #213547;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.slider-track::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #213547;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.slider-track::-moz-range-progress {
+  background: #213547;
+  border-radius: 0.5rem;
+  height: 0.5rem;
+}
