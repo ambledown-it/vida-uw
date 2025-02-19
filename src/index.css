@@ -162,18 +162,76 @@ tr.hover-effect:nth-child(odd) {
 
 /* Tab Button Styles */
 .tab-button {
-  background-color: transparent;
+  position: relative;
+  white-space: nowrap;
+  outline: none;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  margin: 0;
+  padding: 0.5rem 1.5rem;
+  background-color:#7994ac;
+  border: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: #213547;
 }
 
 .tab-button:hover {
-  background-color: rgba(33, 53, 71, 0.1);
+  background-color:#c1cad2;
+  border: none;
 }
 
 .tab-button:focus {
   outline: none;
-  box-shadow: none;
+}
+
+/* Active tab styles */
+.tab-button.active {
+  background-color: #213547;
+  color: white;
+}
+
+.tab-button.active:hover {
+  background-color: #213547;
+}
+
+/* Remove double borders between tabs */
+.tab-button:not(:first-child) {
+  margin-left: -2px;
+}
+
+/* Badge styles for counts */
+.tab-button .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+}
+
+/* Active tab badge */
+.tab-button.active .badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Inactive tab badge */
+.tab-button:not(.active) .badge {
+  background-color: rgba(33, 53, 71, 0.1);
+  color: #213547;
+}
+
+/* Ensure proper border radius */
+.tab-button:first-child {
+  border-top-left-radius: 0.5rem;
+  margin-left: 0;
+}
+
+.tab-button:last-child {
+  border-top-right-radius: 0.5rem;
 }
 
 /* Table Action Button Styles */
@@ -198,22 +256,6 @@ tr.hover-effect:nth-child(odd) {
 .table-action-button:focus {
   outline: none;
   box-shadow: none;
-}
-
-/* Override any default button styles */
-.table-action-button.button {
-  background-color: #93b244;
-  border: none;
-  padding: 0;
-}
-
-.table-action-button.button:hover {
-  background-color: #839f3c;
-  border: none;
-}
-
-.table-action-button.button:focus {
-  outline: none;
 }
 
 /* Drawer Styles */
@@ -299,7 +341,8 @@ tr.hover-effect:nth-child(odd) {
 }
 
 .drawer-action-button:hover {
-  background-color: #C5D796;
+  background-color: #C1CAD2;
+  color: #213547;
 }
 
 .drawer-action-button:focus {
@@ -530,8 +573,20 @@ tr.hover-effect:nth-child(odd) {
   height: 1.25rem;
 }
 
-/* Input Styles */
 input[type="text"],
+textarea {
+  border-color: #e5e7eb;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Input Styles */
 input[type="date"],
 input[type="number"],
 input[type="search"],
@@ -544,6 +599,8 @@ textarea {
   border-radius: 0.5rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
   width: 100%;

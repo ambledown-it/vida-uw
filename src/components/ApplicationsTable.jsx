@@ -7,7 +7,8 @@ import {
   AlertCircle, 
   CheckCircle2, 
   XCircle,
-  SquareArrowOutUpRight
+  SquareArrowOutUpRight,
+  PenLine
 } from 'lucide-react'
 import ApplicationDrawer from './ApplicationDrawer'
 import StatusBadge from './StatusBadge'
@@ -61,6 +62,7 @@ const ApplicationsTable = () => {
   const [salesChannel, setSalesChannel] = useState('')
   const [sumAssuredFilter, setSumAssuredFilter] = useState(0)
   const [selectedApplication, setSelectedApplication] = useState(null)
+  const [manualUwFilter, setManualUwFilter] = useState('')
 
   const tabCounts = useMemo(() => {
     return applications.reduce((acc, app) => {
@@ -126,9 +128,16 @@ const ApplicationsTable = () => {
         }
       }
 
+      // Manual Underwriting filter
+      if (manualUwFilter) {
+        const hasManualUw = app.manualuwid != null
+        if (manualUwFilter === 'yes' && !hasManualUw) return false
+        if (manualUwFilter === 'no' && hasManualUw) return false
+      }
+
       return true
     })
-  }, [applications, activeTab, searchTerm, termFilter, dateRange, salesChannel, sumAssuredFilter])
+  }, [applications, activeTab, searchTerm, termFilter, dateRange, salesChannel, sumAssuredFilter, manualUwFilter])
 
   console.log('Filtered Applications:', filteredApplications)
 
@@ -169,6 +178,8 @@ const ApplicationsTable = () => {
         onSalesChannelChange={setSalesChannel}
         sumAssuredFilter={sumAssuredFilter}
         onSumAssuredChange={setSumAssuredFilter}
+        manualUwFilter={manualUwFilter}
+        onManualUwFilterChange={setManualUwFilter}
       />
 
       <div className="flex-1 flex flex-col min-h-0">
@@ -183,6 +194,7 @@ const ApplicationsTable = () => {
             <table className="w-full table-fixed">
               <colgroup>
                 <col className="w-[6%]" />
+                <col className="w-[4%]" />
                 <col className="w-[8%]" />
                 <col className="w-[17%]" />
                 <col className="w-[15%]" />
@@ -195,7 +207,10 @@ const ApplicationsTable = () => {
               <thead>
                 <tr>
                   <th className="px-6 py-3 text-left text-sm font-bold text-white first:rounded-tl-lg">
-                    {/* Empty header for status icons */}
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white">
+                    {/* Empty header for Manual UW icon */}
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-bold text-white">
                     Application ID
@@ -231,6 +246,7 @@ const ApplicationsTable = () => {
             <table className="w-full table-fixed">
               <colgroup>
                 <col className="w-[6%]" />
+                <col className="w-[4%]" />
                 <col className="w-[8%]" />
                 <col className="w-[17%]" />
                 <col className="w-[15%]" />
@@ -254,7 +270,18 @@ const ApplicationsTable = () => {
                         <StatusBadge status={app.detailedstatus} />
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-center w-[80px]">{app.appid}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex justify-center">
+                        {app.manualuwid && (
+                          <PenLine className="w-4 h-4 text-[#213547]" />
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <span className="text-sm text-gray-900">
+                        {app.appid}
+                      </span>
+                    </td>
                     <td className="px-6 py-4">{`${app.firstnames} ${app.surname}`}</td>
                     <td className="px-6 py-4">{app.idnumber}</td>
                     <td className="px-6 py-4">{new Date(app.datecreated).toLocaleDateString()}</td>

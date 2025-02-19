@@ -25,24 +25,11 @@ const TabsCard = ({ activeTab, onTabChange, tabCounts }) => {
           onClick={() => onTabChange(tab.id)}
           className={`
             tab-button
-            px-6 py-2 text-sm font-medium rounded-t-lg 
-            border-0 outline-none focus:outline-none
-            transition-colors duration-200
-            ${activeTab === tab.id 
-              ? 'bg-[#213547] text-white' 
-              : 'bg-red text-[#213547] hover:bg-[#213547]/10'
-            }
+            ${activeTab === tab.id ? 'active' : ''}
           `}
-          style={{ backgroundColor: activeTab === tab.id ? '#213547' : '#52718d' }}
         >
           {tab.label}
-          <span className={`
-            ml-2 px-2 py-0.5 text-xs rounded-full
-            ${activeTab === tab.id 
-              ? 'bg-white/20' 
-              : 'bg-[#213547]/10'
-            }
-          `}>
+          <span className="badge">
             {tab.id === '5' ? totalCount : getTabCount(tab.id)}
           </span>
         </button>

@@ -1,4 +1,6 @@
 import { Search as SearchIcon, RotateCcw } from 'lucide-react'
+import SearchFilter from './SearchFilter'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 const FilterCard = ({ 
   searchTerm, 
@@ -10,7 +12,9 @@ const FilterCard = ({
   salesChannel,
   onSalesChannelChange,
   sumAssuredFilter,
-  onSumAssuredChange
+  onSumAssuredChange,
+  manualUwFilter,
+  onManualUwFilterChange
 }) => {
   const handleTermChange = (e) => {
     const value = e.target.value
@@ -34,6 +38,7 @@ const FilterCard = ({
     onDateRangeChange({ from: '', to: '' })
     onSalesChannelChange('')
     onSumAssuredChange(0)
+    onManualUwFilterChange('')
   }
 
   const getSliderProgress = (value, min, max) => {
@@ -56,22 +61,12 @@ const FilterCard = ({
 
       {/* Filter Content */}
       <div className="p-6 divide-y divide-gray-200">
+      
         {/* Search Filter */}
-        <div className="py-6 first:pt-0">
-          <label className="block text-sm font-bold text-[#213547] mb-2">
-            Search
-          </label>
-          <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search by name or ID number..."
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 border-2 border-gray-200 rounded-lg"
-            />
-          </div>
-        </div>
+        <SearchFilter 
+          searchTerm={searchTerm}
+          onSearchChange={onSearchChange}
+        />
 
         {/* Sales Channel Filter */}
         <div className="py-6">
@@ -162,6 +157,22 @@ const FilterCard = ({
             />
             <span className="text-xs text-gray-500">5M</span>
           </div>
+        </div>
+
+        {/* Manual Underwriting Filter - Now last */}
+        <div className="py-6">
+          <label className="block text-sm font-bold text-[#213547] mb-2">
+            Manual Underwriting
+          </label>
+          <select
+            value={manualUwFilter}
+            onChange={(e) => onManualUwFilterChange(e.target.value)}
+            className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm"
+          >
+            <option value="">All Applications</option>
+            <option value="yes">Manually Underwritten</option>
+            <option value="no">Not Manually Underwritten</option>
+          </select>
         </div>
       </div>
     </div>
