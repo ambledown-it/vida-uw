@@ -331,8 +331,9 @@ tr.hover-effect:nth-child(odd) {
 }
 
 .drawer-action-button:hover {
-  background-color: #C1CAD2;
-  color: #213547;
+  background-color: #213547;
+  border-bottom: 3px solid white;
+  color: white;
 }
 
 .drawer-action-button:focus {
@@ -687,7 +688,7 @@ textarea:focus {
 
 .menu-button.active {
   color: white;
-  border-bottom: 2px solid #93b244;
+  border-bottom: 3px solid white;
 }
 
 .menu-button:disabled {
