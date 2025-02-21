@@ -1,5 +1,5 @@
-import { useApplications } from '../contexts/ApplicationsContext'
 import { useState, useMemo } from 'react'
+import { useApplications } from '../hooks/useApplications'
 import FilterCard from './FilterCard'
 import TabsCard from './TabsCard'
 import { 
@@ -54,7 +54,7 @@ const CommissionBadge = ({ value }) => {
 }
 
 const ApplicationsTable = () => {
-  const { applications, loading, error } = useApplications()
+  const { data: applications, isLoading, error } = useApplications()
   const [searchTerm, setSearchTerm] = useState('')
   const [termFilter, setTermFilter] = useState(0)
   const [dateRange, setDateRange] = useState({ from: '', to: '' })
@@ -65,14 +65,14 @@ const ApplicationsTable = () => {
   const [manualUwFilter, setManualUwFilter] = useState('')
 
   const tabCounts = useMemo(() => {
-    return applications.reduce((acc, app) => {
+    return (applications || []).reduce((acc, app) => {
       acc[app.statusid] = (acc[app.statusid] || 0) + 1
       return acc
     }, {})
   }, [applications])
 
   const filteredApplications = useMemo(() => {
-    return applications.filter(app => {
+    return (applications || []).filter(app => {
       // Status tab filter - skip for "All" tab
       if (activeTab !== '5') {
         if (activeTab === '3') {
@@ -137,7 +137,7 @@ const ApplicationsTable = () => {
 
       return true
     })
-  }, [applications, activeTab, searchTerm, termFilter, dateRange, salesChannel, sumAssuredFilter, manualUwFilter])
+  }, [applications, searchTerm, activeTab, salesChannel, manualUwFilter, dateRange, termFilter, sumAssuredFilter])
 
   console.log('Filtered Applications:', filteredApplications)
 
@@ -149,9 +149,9 @@ const ApplicationsTable = () => {
     })
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-full rounded-r-lg shadow-sm">
+      <div className="flex items-center justify-center h-full">
         <div className="text-gray-500">Loading applications...</div>
       </div>
     )
@@ -159,8 +159,8 @@ const ApplicationsTable = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-full">
-        <div className="text-red-500">{error}</div>
+      <div className="flex items-center justify-center h-full">
+        <div className="text-red-500">Failed to load applications</div>
       </div>
     )
   }

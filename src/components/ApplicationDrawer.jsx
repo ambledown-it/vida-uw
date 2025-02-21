@@ -1,6 +1,5 @@
 import { X } from 'lucide-react'
-import { useEffect } from 'react'
-import { useSingleApplication } from '../contexts/SingleApplicationContext'
+import { useApplication } from '../hooks/useApplication'
 import ApplicantDetails from './ApplicantDetails'
 import PolicyDetails from './PolicyDetails'
 import MagnumDetails from './MagnumDetails'
@@ -8,13 +7,7 @@ import PremiumDetails from './PremiumDetails'
 import DrawerButtons from './DrawerButtons'
 
 const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNumber }) => {
-  const { applicationDetails, fetchApplicationDetails } = useSingleApplication()
-
-  useEffect(() => {
-    if (isOpen && applicationId) {
-      fetchApplicationDetails(applicationId)
-    }
-  }, [isOpen, applicationId])
+  const { data: applicationDetails, isLoading, error } = useApplication(applicationId)
 
   return (
     <>
@@ -29,9 +22,9 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
       {/* Drawer */}
       <div className={`
         fixed inset-y-0 right-0 w-[45%] bg-gray-50 shadow-xl transform 
-        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
         transition-transform duration-300 ease-in-out z-50
         flex flex-col
+        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
       `}>
         {/* Header - fixed at top */}
         <div className="bg-[#213547] h-24 px-6 flex items-center shrink-0" style={{ backgroundImage: 'url("/bg-header.svg")' }}>
@@ -56,7 +49,11 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
         {/* Content - scrollable */}
         <div className="flex-1 overflow-y-auto">
           <div className="divide-y divide-gray-200 pb-24">
-            {applicationDetails && (
+            {isLoading ? (
+              <div className="p-6 text-center text-gray-500">Loading application details...</div>
+            ) : error ? (
+              <div className="p-6 text-center text-red-500">Failed to load application details</div>
+            ) : applicationDetails && (
               <>
                 <div className="px-6 py-4 bg-white">
                   <PolicyDetails policyData={applicationDetails[0]} />

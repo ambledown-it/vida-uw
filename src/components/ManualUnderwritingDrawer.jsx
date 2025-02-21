@@ -1,8 +1,10 @@
 import { X, CheckCircle2, XCircle, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { useManualUnderwriting } from '../contexts/ManualUnderwritingContext'
+import { useManualUnderwriting } from '../hooks/useManualUnderwriting'
+import { useQueryClient } from '@tanstack/react-query'
 
 const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
+  const queryClient = useQueryClient()
   const [decision, setDecision] = useState('')
   const [hasAdjustments, setHasAdjustments] = useState(false)
   const [hasExclusions, setHasExclusions] = useState(false)
@@ -14,8 +16,24 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
     { id: 1, exclusion: '' }
   ])
   const [notes, setNotes] = useState('')
-  const { submitManualUnderwriting } = useManualUnderwriting()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { mutate: submitManualUnderwriting, isLoading: isSubmitting } = useManualUnderwriting()
+
+  const handleClose = () => {
+    // Reset form state
+    setDecision('')
+    setHasAdjustments(false)
+    setHasExclusions(false)
+    setHasNotes(false)
+    setAdjustments([{ id: 1, type: '', value: '' }])
+    setExclusions([{ id: 1, exclusion: '' }])
+    setNotes('')
+    
+    // Invalidate both queries to ensure fresh data
+    queryClient.invalidateQueries({ queryKey: ['applications'] })
+    queryClient.invalidateQueries({ queryKey: ['application', applicationId] })
+    
+    onClose()
+  }
 
   const handleAdjustmentChange = (id, field, value) => {
     if (field === 'value') {
@@ -59,24 +77,24 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
   const handleSubmit = async () => {
     if (!decision) return
 
-    try {
-      setIsSubmitting(true)
-
-      const data = {
-        decision,
-        adjustments: hasAdjustments ? adjustments : null,
-        exclusions: hasExclusions ? exclusions : null,
-        notes: hasNotes ? notes : null
-      }
-
-      await submitManualUnderwriting(applicationId, data)
-      onClose()
-    } catch (error) {
-      // Handle error (you might want to show an error message to the user)
-      console.error('Failed to submit:', error)
-    } finally {
-      setIsSubmitting(false)
+    const data = {
+      decision,
+      adjustments: hasAdjustments ? adjustments : null,
+      exclusions: hasExclusions ? exclusions : null,
+      notes: hasNotes ? notes : null
     }
+
+    submitManualUnderwriting(
+      { applicationId, data },
+      {
+        onSuccess: () => {
+          handleClose()
+        },
+        onError: (error) => {
+          console.error('Failed to submit:', error)
+        }
+      }
+    )
   }
 
   return (
@@ -85,7 +103,7 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
       {isOpen && (
         <div 
           className="drawer-backdrop"
-          onClick={onClose}
+          onClick={handleClose}
         />
       )}
 
@@ -101,7 +119,7 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
         {/* Header */}
         <div className="bg-[#213547] h-24 px-6 flex items-center" style={{ backgroundImage: 'url("/bg-header.svg")' }}>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="drawer-exit-button text-white hover:text-gray-200 mr-6"
           >
             <X className="w-6 h-6" />
