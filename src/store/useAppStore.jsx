@@ -7,6 +7,10 @@ const useAppStore = create((set) => ({
   role: null,
   error: null,
   
+  // Application navigation state
+  activeMenuItem: 'applications',
+  setActiveMenuItem: (menuItem) => set({ activeMenuItem: menuItem }),
+  
   // Login functionality - simplified to just set the state
   login: (data) => {
     const { token, role, ...userData } = data;
@@ -25,7 +29,8 @@ const useAppStore = create((set) => ({
       user: null,
       token: null,
       role: null,
-      error: null
+      error: null,
+      activeMenuItem: 'applications' // Reset to applications on logout
     });
   },
   
