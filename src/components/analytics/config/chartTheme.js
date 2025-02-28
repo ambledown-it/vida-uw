@@ -1,11 +1,11 @@
 const chartTheme = {
     colors: {
       primary: '#93B244', // Using your green color as primary
-      secondary: '#F59E0B',
-      tertiary: '#9CA3AF',
+      secondary: '#213547',
+      tertiary: '#213547',
       negative: '#EF4444',
       background: '#FFFFFF',
-      grid: '#f0f0f0',
+      grid: 'transparent',
       text: '#213547' // Using your text color
     },
     spacing: {
@@ -20,7 +20,7 @@ const chartTheme = {
       duration: 1000
     },
     grid: {
-      stroke: '#f0f0f0',
+      stroke: 'transparent',
       strokeDasharray: '3 3',
       vertical: true
     },

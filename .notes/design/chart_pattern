@@ -1,0 +1,126 @@
+# Dashboard Data Fetching Architecture
+
+## Overview
+
+This document outlines the recommended pattern for implementing data fetching and filtering across dashboard visualizations. The architecture optimizes for:
+
+- Centralized filter state management
+- Efficient server-side filtering and aggregation
+- Minimized network requests
+- Responsive UI experience
+- Support for multiple dashboard views/tabs
+
+## Core Architecture
+
+### 1. Filter State Management
+
+Maintain a centralized filter state store with these characteristics:
+
+- Global filters that affect all dashboards
+- Dashboard-specific filters that only apply to particular views
+- Support for filter persistence across navigation
+- Methods for filter reset and bulk updates
+
+```javascript
+// Example structure (implementation-agnostic)
+{
+  global: {
+    dateRange: { start: Date, end: Date },
+    refreshInterval: number
+  },
+  dashboardSpecific: {
+    sales: {
+      channels: string[],
+      categories: string[]
+    },
+    performance: {
+      metrics: string[],
+      compareWithPrevious: boolean
+    }
+  }
+}
+```
+
+### 2. Query Pattern
+
+For each dashboard, implement these query patterns:
+
+#### Pattern A: Related Visualizations (Preferred)
+
+When multiple charts display different views of the same underlying data:
+
+1. Create a single endpoint that returns multiple aggregations
+2. Use one query to fetch all related visualizations
+3. Pass the appropriate segment to each chart component
+
+This pattern minimizes network requests while keeping components decoupled.
+
+#### Pattern B: Independent Visualizations
+
+When charts display data from different domains:
+
+1. Create separate query hooks for each visualization
+2. Each hook should accept and apply relevant filters
+3. Each hook should implement appropriate caching strategies
+
+### 3. Dashboard Container Structure
+
+```
+DashboardContainer
+├── FilterPanel (uses global and tab-specific filters)
+├── TabNavigation
+│   ├── Tab 1 (e.g., Sales Dashboard)
+│   │   ├── Visualization Group A (uses Pattern A)
+│   │   │   ├── Chart 1
+│   │   │   └── Chart 2
+│   │   └── Visualization B (uses Pattern B)
+│   └── Tab 2 (e.g., Performance Dashboard)
+│       └── ...
+└── SharedComponents
+    └── DateRangePicker, etc.
+```
+
+## Implementation Guidelines
+
+### Server-Side Considerations
+
+1. Design endpoints that accept all relevant filter parameters
+2. Implement server-side aggregation for all visualization data
+3. Use database indexes on frequently filtered columns
+4. Consider materialized views for complex, frequently-accessed visualizations
+5. Implement appropriate caching headers
+
+### Client-Side Optimizations
+
+1. Debounce rapidly changing filters
+2. Implement stale-while-revalidate caching
+3. Show loading indicators during data fetching
+4. Preserve and reuse filter state across tab navigation
+5. Load dashboard tabs lazily to improve initial load time
+
+### Multi-Tab Implementation
+
+When implementing dashboards across multiple tabs:
+
+1. Store active tab in application state
+2. Preserve filter selections when switching tabs
+3. Consider pre-fetching data for adjacent tabs
+4. Implement tab-specific URL parameters for deep linking
+
+## Error Handling
+
+1. Implement robust error boundaries around visualization components
+2. Provide fallback UI for failed data fetches
+3. Add retry mechanisms for transient failures
+4. Log detailed error information for debugging
+
+## Performance Monitoring
+
+1. Track response times for each visualization query
+2. Monitor client-side rendering performance
+3. Implement feature flags for gradual rollout of new visualizations
+4. Set up alerts for slow-performing queries
+
+---
+
+This architecture provides a foundation for building responsive, maintainable dashboards with efficient data fetching patterns while maintaining a clear separation of concerns.
