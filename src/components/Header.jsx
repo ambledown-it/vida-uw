@@ -1,16 +1,10 @@
 import { UserRound } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import Menu from './Menu'
+import useAppStore from '../store/useAppStore'
 
 const Header = () => {
-  const [firstName, setFirstName] = useState('')
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'))
-    if (user && user.firstname) {
-      setFirstName(user.firstname)
-    }
-  }, [])
+  const user = useAppStore(state => state.user)
+  const firstName = user?.firstname || ''
 
   return (
     <header 

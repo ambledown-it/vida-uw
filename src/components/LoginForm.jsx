@@ -1,16 +1,21 @@
 import { useState } from 'react'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 const LoginForm = () => {
   const [credentials, setCredentials] = useState({
     username: '',
     password: ''
   })
-  const { login, error } = useAuth()
+  
+  const { login, isLoggingIn, error } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await login(credentials)
+    try {
+      await login(credentials)
+    } catch (err) {
+      console.error('Login failed:', err)
+    }
   }
 
   return (
@@ -58,8 +63,9 @@ const LoginForm = () => {
               <button
                 type="submit"
                 className="w-full"
+                disabled={isLoggingIn}
               >
-                Sign In
+                {isLoggingIn ? 'Signing In...' : 'Sign In'}
               </button>
             </form>
           </div>

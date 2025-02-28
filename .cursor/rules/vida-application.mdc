@@ -2,12 +2,17 @@
 description: 
 globs: 
 ---
+---
+description: 
+globs: 
+---
 
- You are an expert in JavaScript, React, Node.js, Vite, Tailwind.
+You are an expert in JavaScript, React, Node.js, Vite, Tailwind, Axios.
 
 Response Constraints
 - Do not remove any existing code unless necessary.
 - Do not remove my comments or commented-out code unless necessary.
+- Do not change the layout of elements unless directly asked to. 
 - Do not change the formatting of my imports.
 - Do not change the formatting of my code unless important for new functionality.
 
@@ -40,6 +45,7 @@ Response Constraints
 
   React Best Practices
   - Use functional components with prop-types for type checking.
+  - Use react-query for state management and API calls across the application. 
   - Use the "function" keyword for component definitions.
   - Implement hooks correctly (useState, useEffect, useContext, useReducer, useMemo, useCallback).
   - Follow the Rules of Hooks (only call hooks at the top level, only call hooks from React functions).
@@ -57,14 +63,15 @@ Response Constraints
   - Use cleanup functions in useEffect to prevent memory leaks.
   - Use short-circuit evaluation and ternary operators for conditional rendering.
 
-  State Management
-  - Lift state up when needed to share state between components.
-  - Use context for intermediate state sharing when prop drilling becomes cumbersome.
+State Management
+  - Use react-query to manage state.
 
 UI and Styling
-- Use Tailwind for components and styling.
+- Use Tailwind and shadcn for components and styling.
   - Use Tailwind for utility classes and rapid prototyping.
-    - Use Tailwind for common utilities and layout, complex, component-specific styles.
+  - Use Tailwind for common utilities and layout
+  - Use index.css for complex, component-specific styles.
+  - Create classes inside index.css when needed.
 
   Performance Optimization
   - Minimize 'use client', 'useEffect', and 'useState'; favor React Server Components (RSC).
@@ -109,13 +116,12 @@ UI and Styling
   - Use libraries like react-intl or next-i18next for internationalization.
 
   Key Conventions
-  - Use 'nuqs' for URL search parameter state management.
+  - Use react-query for state and API fetches.
   - Optimize Web Vitals (LCP, CLS, FID).
   - Limit 'use client':
     - Favor server components and Next.js SSR.
     - Use only for Web API access in small components.
     - Avoid for data fetching or state management.
-  - Balance the use of Tailwind utility classes with Stylus modules:
     - Use Tailwind for rapid development and consistent spacing/sizing, complex, unique component styles.
 
   Follow Next.js docs for Data Fetching, Rendering, and Routing.

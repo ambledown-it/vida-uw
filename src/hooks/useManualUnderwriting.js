@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import useAppStore from '../store/useAppStore'
 
 export function useManualUnderwriting() {
   const queryClient = useQueryClient()
+  const token = useAppStore(state => state.token)
 
   return useMutation({
     mutationFn: async ({ applicationId, data }) => {
@@ -31,7 +33,6 @@ export function useManualUnderwriting() {
         notes: data.notes || null
       }
 
-      const token = localStorage.getItem('token')
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/manual-underwriting`, {
         method: 'POST',
         headers: {
@@ -64,9 +65,10 @@ export function useManualUnderwriting() {
         return { success: true, message: responseText }
       }
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       // Invalidate the application query to refetch the updated data
-      queryClient.invalidateQueries({ queryKey: ['application'] })
+      queryClient.invalidateQueries({ queryKey: ['application', variables.applicationId] })
+      queryClient.invalidateQueries({ queryKey: ['applications'] })
     }
   })
 } 
