@@ -1,30 +1,63 @@
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status, actioner }) => {
   const getStatusStyles = (status) => {
-    switch(status?.toLowerCase()) {
-      case 'accepted':
-        return 'bg-[#F3F7E9] text-[#93b244]'
-      case 'referred':
-        return 'bg-amber-50 text-amber-700'
-      case 'rejected':
-        return 'bg-red-50 text-red-700'
-      case 'pending':
-        return 'bg-gray-50 text-gray-700'
+    // If status is a string (legacy support), convert to lowercase for comparison
+    if (typeof status === 'string') {
+      const statusLower = status.toLowerCase();
+      if (statusLower === 'accepted') return 'bg-[#F3F7E9] text-[#93b244]';
+      if (statusLower === 'referred') return 'bg-amber-50 text-amber-700';
+      if (statusLower === 'rejected') return 'bg-red-50 text-red-700';
+      if (statusLower === 'pending') return 'bg-gray-50 text-gray-700';
+      return 'bg-gray-200 text-gray-700';
+    }
+    
+    // Handle numeric statusid
+    switch(status) {
+      case '1': // Open/Pending
+        return 'bg-gray-50 text-gray-700';
+      case '2': // Referred
+        return 'bg-amber-50 text-amber-700';
+      case '3': // Accepted
+        return 'bg-[#F3F7E9] text-[#93b244]';
+      case '4': // Rejected
+        return 'bg-red-50 text-red-700';
       default:
-        return 'bg-gray-200 text-gray-700'
+        return 'bg-gray-200 text-gray-700';
     }
   }
 
   const formatStatus = (status) => {
-    if (!status) return 'Pending'
-    return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+    // If status is a string (legacy support), format it properly
+    if (typeof status === 'string' && isNaN(status)) {
+      if (!status) return 'Pending';
+      return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+    }
+    
+    // Handle numeric statusid
+    switch(status) {
+      case '1':
+        return 'Pending';
+      case '2':
+        return 'Referred';
+      case '3':
+        return 'Accepted';
+      case '4':
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
   }
+
+  // Format the combined text with status and actioner
+  const badgeText = actioner 
+    ? `${formatStatus(status)} ${actioner}` 
+    : formatStatus(status);
 
   return (
     <span className={`
       inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium
       ${getStatusStyles(status)}
     `}>
-      {formatStatus(status)}
+      {badgeText}
     </span>
   )
 }

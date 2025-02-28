@@ -1,4 +1,4 @@
-import { User, Phone, Mail, Calendar, Fingerprint, UserCircle } from 'lucide-react'
+import { User, Phone, Mail, Calendar, Fingerprint, UserCircle, MapPin } from 'lucide-react'
 
 const ApplicantDetails = ({ applicantData }) => {
   const formatAddress = () => {
@@ -12,7 +12,8 @@ const ApplicantDetails = ({ applicantData }) => {
       applicantData.postalcode
     ].filter(Boolean)
     
-    return parts.join(', ')
+    // Return a dash if no address components are available
+    return parts.length > 0 ? parts.join(', ') : '-'
   }
 
   const formatDate = (dateString) => {
@@ -95,7 +96,7 @@ const ApplicantDetails = ({ applicantData }) => {
             </div>
             <div>
               <div className="text-sm text-[#213547]/70">Cell Phone</div>
-              <div className="font-bold text-[#213547]">{applicantData.cellphone}</div>
+              <div className="font-bold text-[#213547]">{applicantData.cellphone || '-'}</div>
             </div>
           </div>
         </div>
@@ -107,7 +108,19 @@ const ApplicantDetails = ({ applicantData }) => {
             </div>
             <div>
               <div className="text-sm text-[#213547]/70">Email</div>
-              <div className="font-bold text-[#213547]">{applicantData.email}</div>
+              <div className="font-bold text-[#213547]">{applicantData.email || '-'}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow-sm col-span-2">
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-100 p-2 rounded-lg">
+              <MapPin className="w-5 h-5 text-[#213547]" />
+            </div>
+            <div>
+              <div className="text-sm text-[#213547]/70">Address</div>
+              <div className="font-bold text-[#213547]">{formatAddress()}</div>
             </div>
           </div>
         </div>

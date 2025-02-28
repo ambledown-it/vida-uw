@@ -5,9 +5,10 @@ import PolicyDetails from './PolicyDetails'
 import MagnumDetails from './MagnumDetails'
 import PremiumDetails from './PremiumDetails'
 import DrawerButtons from './DrawerButtons'
+import StatusBadge from './StatusBadge'
 
 const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNumber }) => {
-  const { data: applicationDetails, isLoading, error } = useApplication(applicationId)
+  const { data: applicationDetails, isLoading, error } = useApplication(applicationId, isOpen)
 
   return (
     <>
@@ -27,23 +28,35 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
         ${isOpen ? 'translate-x-0' : 'translate-x-full'}
       `}>
         {/* Header - fixed at top */}
-        <div className="bg-[#213547] h-24 px-6 flex items-center shrink-0" style={{ backgroundImage: 'url("/bg-header.svg")' }}>
-          <button
-            onClick={onClose}
-            className="drawer-exit-button text-white hover:text-gray-200 mr-6"
-          >
-            <X className="w-6 h-6" />
-          </button>
-          <div className="flex flex-col">
-            <div className="text-white text-lg font-medium">
-              Application {applicationId}
-            </div>
-            <div className="text-white/80 text-sm flex items-center gap-2">
-              <span>{applicantName}</span>
-              <span className="text-white/40">•</span>
-              <span>{idNumber}</span>
+        <div className="bg-[#213547] h-24 px-6 flex items-center justify-between shrink-0" style={{ backgroundImage: 'url("/bg-header.svg")' }}>
+          <div className="flex items-center">
+            <button
+              onClick={onClose}
+              className="drawer-exit-button text-white hover:text-gray-200 mr-6"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="flex flex-col">
+              <div className="text-white text-lg font-medium">
+                Application {applicationId}
+              </div>
+              <div className="text-white/80 text-sm flex items-center gap-2">
+                <span>{applicantName}</span>
+                <span className="text-white/40">•</span>
+                <span>{idNumber}</span>
+              </div>
             </div>
           </div>
+          
+          {/* Status Badge - Now using both detailedstatus and actioner */}
+          {!isLoading && applicationDetails && (
+            <div>
+              <StatusBadge 
+                status={applicationDetails[0]?.detailedstatus} 
+                actioner={applicationDetails[0]?.actioner}
+              />
+            </div>
+          )}
         </div>
 
         {/* Content - scrollable */}
