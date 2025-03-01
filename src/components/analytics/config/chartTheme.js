@@ -25,7 +25,7 @@ const chartTheme = {
       vertical: true
     },
     axis: {
-      axisLine: false,
+      axisLine: true,
       tickLine: false,
       fontSize: 12
     }

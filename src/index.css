@@ -696,3 +696,42 @@ textarea:focus {
   cursor: not-allowed;
   color: #7f7f7f;
 }
+
+.filter-dropdown {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid #213547;
+}
+
+.reset-button {
+  background-color: transparent;
+  border: none;
+  color:white;
+}
+
+.reset-button:hover {
+  background-color: transparent;
+  font-weight: bold;
+}
+
+.filter-dropdown {
+  background-color: white;
+  color: #213547;
+  width: 75%;
+  height: 100%;
+}
+
+.filter-dropdown:hover {
+  background-color: white;
+  color: #213547;
+  font-weight: bold;
+}
+
+.filter-pill-button {
+  background-color: white;
+  color: #213547;
+  font-weight: bold;
+}
+
+
