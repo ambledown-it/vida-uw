@@ -14,7 +14,7 @@ const chartTheme = {
       barGap: 4
     },
     border: {
-      radius: [4, 4, 0, 0] // Using your existing radius
+      radius: [8, 8, 8, 8] // Increased and applied to all corners
     },
     animation: {
       duration: 1000
@@ -25,9 +25,15 @@ const chartTheme = {
       vertical: true
     },
     axis: {
-      axisLine: true,
+      axisLine: false,
       tickLine: false,
       fontSize: 12
+    },
+    // Add specific line chart settings
+    line: {
+      strokeWidth: 3,
+      activeDot: false,
+      dot: false
     }
   };
   

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { Tooltip, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Line, Bar } from 'recharts';
 import chartTheme from '../../config/chartTheme';
 
 // Custom tooltip with the modern design
@@ -49,6 +49,38 @@ export const withChartStyles = (ChartComponent) => {
       // Create default elements with our styling if not provided
       let chartChildren = React.Children.toArray(children);
       
+      // Check if this is a LineChart and modify/add Line components
+      const isLineChart = ChartComponent.displayName === 'LineChart' || 
+                         ChartComponent.name === 'LineChart';
+      
+      // Check if this is a BarChart and add radius to Bar components
+      const isBarChart = ChartComponent.displayName === 'BarChart' || 
+                        ChartComponent.name === 'BarChart';
+      
+      // Process children to add our styling
+      chartChildren = chartChildren.map(child => {
+        // Apply line chart styling
+        if (isLineChart && child.type === Line) {
+          return React.cloneElement(child, {
+            strokeWidth: chartTheme.line.strokeWidth,
+            stroke: child.props.stroke || chartTheme.colors.primary,
+            dot: chartTheme.line.dot,
+            activeDot: chartTheme.line.activeDot,
+            ...child.props
+          });
+        }
+        
+        // Apply bar chart styling with rounded corners on all sides
+        if (isBarChart && child.type === Bar) {
+          return React.cloneElement(child, {
+            radius: chartTheme.border.radius,
+            ...child.props
+          });
+        }
+        
+        return child;
+      });
+      
       // Add grid with our styling if not explicitly provided
       if (showGrid && !chartChildren.some(child => child.type === CartesianGrid)) {
         chartChildren.push(
@@ -93,6 +125,21 @@ export const withChartStyles = (ChartComponent) => {
             key="tooltip"
             content={<ModernTooltip formatter={tooltipFormatter} />}
             cursor={{ fill: 'rgba(0, 0, 0, 0.04)' }}
+          />
+        );
+      }
+      
+      // If this is a LineChart and no Line components are provided, add a default one
+      if (isLineChart && !chartChildren.some(child => child.type === Line)) {
+        chartChildren.push(
+          <Line 
+            key="defaultLine"
+            type="monotone" 
+            dataKey="value" 
+            stroke={chartTheme.colors.primary}
+            strokeWidth={chartTheme.line.strokeWidth}
+            dot={chartTheme.line.dot}
+            activeDot={chartTheme.line.activeDot}
           />
         );
       }

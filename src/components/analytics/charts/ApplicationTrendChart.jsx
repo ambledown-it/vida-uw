@@ -1,4 +1,4 @@
-import { Line, Legend } from 'recharts';
+import { Line, XAxis } from 'recharts';
 import { useAnalytics } from '../../../hooks/useAnalytics';
 import { ModernLineChart } from '../ui/charts/ModernCharts';
 
@@ -26,7 +26,7 @@ const ApplicationTrendChart = () => {
     return formattedData
       .sort((a, b) => new Date(a.date) - new Date(b.date))
       .map(item => ({
-        date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        name: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         count: item.count
       }));
   };
@@ -57,14 +57,17 @@ const ApplicationTrendChart = () => {
         tooltipFormatter={(value) => [`${value} Applications`, 'Count']}
         height="90%"
       >
+        <XAxis 
+          dataKey="name" 
+          axisLine={true} 
+          tickLine={false} 
+          tick={{ fill: '#213547', fontSize: 12 }}
+        />
         <Line 
           type="monotone" 
           dataKey="count" 
           name="Applications" 
-          stroke="#213547" 
-          strokeWidth={2}
-          dot={{ r: 4 }}
-          activeDot={{ r: 6 }}
+          stroke="#93B244"
         />
       </ModernLineChart>
     </div>

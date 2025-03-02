@@ -62,7 +62,6 @@ const ApplicationStatusChart = () => {
           dataKey="count" 
           name="Applications" 
           fill="#93B244"
-          radius={[4, 4, 0, 0]}
         />
       </ModernBarChart>
     </div>
