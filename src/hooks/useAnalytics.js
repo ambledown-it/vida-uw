@@ -59,6 +59,24 @@ export function useAnalytics() {
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
   
+  // Query to fetch application summary counts with filters
+  const applicationSummaryQuery = useQuery({
+    queryKey: ['analytics', 'application-summary', statusFilter, dateRange],
+    queryFn: async () => {
+      const queryParams = getQueryParams()
+      const url = `${import.meta.env.VITE_API_URL}/api/analytics/applications/count-summary${queryParams ? `?${queryParams}` : ''}`
+      
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return response.data
+    },
+    enabled: !!token,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+  
   return {
     applicationStatus: {
       data: applicationStatusQuery.data,
@@ -70,10 +88,16 @@ export function useAnalytics() {
       isLoading: applicationTrendQuery.isLoading,
       error: applicationTrendQuery.error
     },
+    applicationSummary: {
+      data: applicationSummaryQuery.data,
+      isLoading: applicationSummaryQuery.isLoading,
+      error: applicationSummaryQuery.error
+    },
     // Add a refetch function to manually trigger data refresh
     refetch: () => {
       applicationStatusQuery.refetch()
       applicationTrendQuery.refetch()
+      applicationSummaryQuery.refetch()
     }
   }
 } 
