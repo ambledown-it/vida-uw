@@ -1,5 +1,5 @@
-import { X, CheckCircle2, XCircle, Plus, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { X, CheckCircle2, XCircle, Plus, Trash2, FileText } from 'lucide-react'
+import { useState, useRef } from 'react'
 import { useManualUnderwriting } from '../hooks/useManualUnderwriting'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -9,6 +9,7 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
   const [hasAdjustments, setHasAdjustments] = useState(false)
   const [hasExclusions, setHasExclusions] = useState(false)
   const [hasNotes, setHasNotes] = useState(false)
+  const [hasSupportingDocs, setHasSupportingDocs] = useState(false)
   const [adjustments, setAdjustments] = useState([
     { id: 1, type: '', value: '' }
   ])
@@ -16,6 +17,8 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
     { id: 1, exclusion: '' }
   ])
   const [notes, setNotes] = useState('')
+  const [supportingDocs, setSupportingDocs] = useState([])
+  const fileInputRef = useRef(null)
   const { mutate: submitManualUnderwriting, isLoading: isSubmitting } = useManualUnderwriting()
 
   const handleClose = () => {
@@ -24,9 +27,11 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
     setHasAdjustments(false)
     setHasExclusions(false)
     setHasNotes(false)
+    setHasSupportingDocs(false)
     setAdjustments([{ id: 1, type: '', value: '' }])
     setExclusions([{ id: 1, exclusion: '' }])
     setNotes('')
+    setSupportingDocs([])
     
     // Invalidate both queries to ensure fresh data
     queryClient.invalidateQueries({ queryKey: ['applications'] })
@@ -74,6 +79,28 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
     setExclusions(current => current.filter(excl => excl.id !== id))
   }
 
+  const handleFileChange = (e) => {
+    if (e.target.files.length === 0) return;
+    
+    const newFiles = Array.from(e.target.files).map(file => ({
+      id: Date.now() + Math.random().toString(36).substring(2, 9),
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      file
+    }));
+    
+    setSupportingDocs(current => [...current, ...newFiles]);
+  };
+  
+  const handleBrowseClick = () => {
+    fileInputRef.current.click();
+  };
+  
+  const removeDocument = (id) => {
+    setSupportingDocs(current => current.filter(doc => doc.id !== id));
+  };
+
   const handleSubmit = async () => {
     if (!decision) return
 
@@ -81,7 +108,9 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
       decision,
       adjustments: hasAdjustments ? adjustments : null,
       exclusions: hasExclusions ? exclusions : null,
-      notes: hasNotes ? notes : null
+      notes: hasNotes ? notes : null,
+      // Documents will be handled in a future implementation
+      supportingDocs: hasSupportingDocs ? supportingDocs : null
     }
 
     submitManualUnderwriting(
@@ -303,7 +332,157 @@ const ManualUnderwritingDrawer = ({ isOpen, onClose, applicationId }) => {
                       </div>
                     )}
                   </div>
+
+                  {/* Supporting Documents Card - ACCEPT path */}
+                  <div className="bg-white p-6 rounded-lg shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-bold text-[#213547]">Supporting Documents</h3>
+                      <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="hasSupportingDocs"
+                            checked={hasSupportingDocs}
+                            onChange={() => setHasSupportingDocs(true)}
+                            className="custom-radio"
+                          />
+                          <span className="text-sm text-[#213547]">Yes</span>
+                        </label>
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="hasSupportingDocs"
+                            checked={!hasSupportingDocs}
+                            onChange={() => setHasSupportingDocs(false)}
+                            className="custom-radio"
+                          />
+                          <span className="text-sm text-[#213547]">No</span>
+                        </label>
+                      </div>
+                    </div>
+                    {hasSupportingDocs && (
+                      <div className="space-y-4">
+                        {/* Files list */}
+                        {supportingDocs.length > 0 && (
+                          <div className="space-y-2 mb-4">
+                            {supportingDocs.map(doc => (
+                              <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div className="flex items-center gap-2">
+                                  <FileText className="w-5 h-5 text-gray-500" />
+                                  <span className="text-sm">{doc.name}</span>
+                                  <span className="text-xs text-gray-500">
+                                    ({(doc.size / 1024).toFixed(1)} KB)
+                                  </span>
+                                </div>
+                                <button 
+                                  onClick={() => removeDocument(doc.id)}
+                                  className="trash-button text-gray-400 hover:text-red-500"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Hidden file input */}
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={handleFileChange}
+                          className="hidden"
+                          multiple
+                        />
+                        
+                        {/* Browse button */}
+                        <button
+                          type="button"
+                          onClick={handleBrowseClick}
+                          className="add-adjustment-button"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          <span>Browse for documents</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </>
+              )}
+
+              {/* Supporting Documents Card - Add after Notes for both ACCEPT and REJECT */}
+              {decision === 'REJECT' && (
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-bold text-[#213547]">Supporting Documents</h3>
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="hasSupportingDocs"
+                          checked={hasSupportingDocs}
+                          onChange={() => setHasSupportingDocs(true)}
+                          className="custom-radio"
+                        />
+                        <span className="text-sm text-[#213547]">Yes</span>
+                      </label>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="hasSupportingDocs"
+                          checked={!hasSupportingDocs}
+                          onChange={() => setHasSupportingDocs(false)}
+                          className="custom-radio"
+                        />
+                        <span className="text-sm text-[#213547]">No</span>
+                      </label>
+                    </div>
+                  </div>
+                  {hasSupportingDocs && (
+                    <div className="space-y-4">
+                      {/* Files list */}
+                      {supportingDocs.length > 0 && (
+                        <div className="space-y-2 mb-4">
+                          {supportingDocs.map(doc => (
+                            <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                              <div className="flex items-center gap-2">
+                                <FileText className="w-5 h-5 text-gray-500" />
+                                <span className="text-sm">{doc.name}</span>
+                                <span className="text-xs text-gray-500">
+                                  ({(doc.size / 1024).toFixed(1)} KB)
+                                </span>
+                              </div>
+                              <button 
+                                onClick={() => removeDocument(doc.id)}
+                                className="text-gray-400 hover:text-red-500"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {/* Hidden file input */}
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        className="hidden"
+                        multiple
+                      />
+                      
+                      {/* Browse button */}
+                      <button
+                        type="button"
+                        onClick={handleBrowseClick}
+                        className="add-adjustment-button"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        <span>Browse for documents</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
 
               {/* Notes Card */}

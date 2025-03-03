@@ -735,3 +735,15 @@ textarea:focus {
 }
 
 
+.trash-button {
+  background-color: transparent;
+  border: none;
+  color: #213547;
+}
+
+.trash-button:hover {
+  background-color: transparent;
+  color: #93b244;
+}
+
+

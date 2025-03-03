@@ -3,6 +3,7 @@ import ApplicationTrendChart from '../charts/ApplicationTrendChart';
 import ApplicationSummaryCards from '../charts/ApplicationSummaryCards';
 import ManualUWStatusChart from '../charts/ManualUWStatusChart';
 import MagnumDecisionChart from '../charts/MagnumDecisionChart';
+import DemographicStatsCard from '../charts/DemographicStatsCard';
 
 const ApplicationsBoard = () => {
   return (
@@ -14,7 +15,13 @@ const ApplicationsBoard = () => {
       
       {/* Charts Grid */}
       <div className="grid grid-cols-1 gap-6">
-        {/* Status and Manual UW Charts Card */}
+
+        
+        {/* Trend Chart */}
+        <div className="bg-white border border-gray-100 rounded-lg shadow-sm p-4">
+          <ApplicationTrendChart />
+        </div>
+                {/* Status and Manual UW Charts Card */}
         <div className="bg-white border border-gray-100 rounded-lg shadow-sm p-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <ApplicationStatusChart />
@@ -22,11 +29,10 @@ const ApplicationsBoard = () => {
             <MagnumDecisionChart />
           </div>
         </div>
+        
+        {/* Demographic Statistics Card */}
+        <DemographicStatsCard />
 
-        {/* Trend Chart */}
-        <div className="bg-white border border-gray-100 rounded-lg shadow-sm p-4">
-          <ApplicationTrendChart />
-        </div>
       </div>
     </div>
   );

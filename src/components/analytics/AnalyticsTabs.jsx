@@ -7,7 +7,7 @@ const AnalyticsTabs = ({ activeTab, onTabChange }) => {
   ];
 
   return (
-    <div className="flex mb-6">
+    <div className="flex mb-0">
       {tabs.map((tab) => (
         <button
           key={tab.id}

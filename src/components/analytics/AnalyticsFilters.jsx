@@ -85,7 +85,7 @@ const AnalyticsFilters = () => {
   const isDateFilterActive = !!dateRange.end;
 
   return (
-    <div className="bg-[#213547] border border-gray-100 rounded-lg shadow-sm p-4 mb-6">
+    <div className="bg-[#213547] border border-gray-100 rounded-lg shadow-sm p-4 mb-0">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
         <div className="w-full md:w-auto flex flex-col md:flex-row gap-4 items-start">
           

@@ -11,7 +11,7 @@ const MagnumDecisionChart = () => {
     // Map decisions to friendly names and colors
     const decisionMap = {
       'ACCEPT': { name: 'Accept', color: '#93b244' },
-      'REFER': { name: 'Refer', color: '#F59E0B' },
+      'REFER': { name: 'Refer', color: '#213547' },
       'REJECT': { name: 'Reject', color: '#B2445C' },
       'Pending': { name: 'Pending', color: '#9CA3AF' }
     };
@@ -59,7 +59,7 @@ const MagnumDecisionChart = () => {
 
   // Custom legend renderer
   const renderColorfulLegendText = (value, entry) => {
-    return <span className="text-sm text-[#213547]">{value}</span>;
+    return <span className="text-sm text-[#213547]" style={{ wordBreak: 'break-word', width: '100px' }}>{value}</span>;
   };
 
   return (
@@ -90,9 +90,10 @@ const MagnumDecisionChart = () => {
           <Legend 
             formatter={renderColorfulLegendText}
             iconType="circle"
-            layout="horizontal"
-            verticalAlign="bottom"
-            align="center"
+            layout="vertical"
+            verticalAlign="middle"
+            align="right"
+            wrapperStyle={{ right: 10, top: '50%', transform: 'translateY(-50%)', maxWidth: '120px' }}
           />
         </PieChart>
       </ResponsiveContainer>

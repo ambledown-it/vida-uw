@@ -61,7 +61,7 @@ const ApplicationStatusChart = () => {
 
   // Custom legend renderer
   const renderColorfulLegendText = (value, entry) => {
-    return <span className="text-sm text-[#213547]">{value}</span>;
+    return <span className="text-sm text-[#213547]" style={{ wordBreak: 'break-word', width: '100px' }}>{value}</span>;
   };
 
   return (
@@ -92,9 +92,10 @@ const ApplicationStatusChart = () => {
           <Legend 
             formatter={renderColorfulLegendText}
             iconType="circle"
-            layout="horizontal"
-            verticalAlign="bottom"
-            align="center"
+            layout="vertical"
+            verticalAlign="middle"
+            align="right"
+            wrapperStyle={{ right: 10, top: '50%', transform: 'translateY(-50%)', maxWidth: '120px' }}
           />
         </PieChart>
       </ResponsiveContainer>

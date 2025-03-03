@@ -4,6 +4,7 @@ import useAppStore from '../store/useAppStore'
 
 const Header = () => {
   const user = useAppStore(state => state.user)
+  const role = useAppStore(state => state.role)
   const firstName = user?.firstname || ''
 
   return (
@@ -24,9 +25,14 @@ const Header = () => {
           </h2>
         </div>
         <div className="flex items-center gap-3 text-white">
-          <span className="text-lg font-medium">
-            {firstName}
-          </span>
+          <div className="flex flex-col items-end">
+            <span className="text-lg font-medium">
+              {firstName}
+            </span>
+            <span className="text-sm text-white/70">
+              {role ? role.charAt(0).toUpperCase() + role.slice(1).toLowerCase() : 'User'}
+            </span>
+          </div>
           <UserRound className="w-8 h-8" />
         </div>
       </div>

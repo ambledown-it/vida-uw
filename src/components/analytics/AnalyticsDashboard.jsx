@@ -26,7 +26,7 @@ const AnalyticsDashboard = () => {
   };
 
   return (
-    <div className="h-full w-full flex flex-col bg-white rounded-lg shadow-sm overflow-hidden">
+    <div className="h-full w-full flex flex-col bg-transparent rounded-lg overflow-hidden">
       {/* Fixed Header Section */}
       <div className="flex-none">
         <div className="p-4">

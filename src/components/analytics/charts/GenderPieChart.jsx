@@ -1,32 +1,36 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useAnalytics } from '../../../hooks/useAnalytics';
+import chartTheme from '../config/chartTheme';
 
-const ManualUWStatusChart = () => {
-  const { applicationStatus: { data, isLoading, error } } = useAnalytics();
+const GenderPieChart = () => {
+  const { genderData: { data, isLoading, error } } = useAnalytics();
   
   // Format data for Recharts
   const formatChartData = (apiData) => {
     if (!apiData || !Array.isArray(apiData)) return [];
     
-    // Calculate totals across all statuses
-    const totals = apiData.reduce((acc, item) => {
-      acc.withManualUW += parseInt(item.with_manualuwid);
-      acc.withoutManualUW += parseInt(item.without_manualuwid);
-      return acc;
-    }, { withManualUW: 0, withoutManualUW: 0 });
+    // Map genders to friendly names and colors
+    const genderMap = {
+      'M': { name: 'Male', color: '#213547' },
+      'F': { name: 'Female', color: '#93b244' },
+      'Unknown': { name: 'Unknown', color: '#E5E7EB' }
+    };
     
-    return [
-      {
-        name: 'Manually Underwritten',
-        value: totals.withManualUW,
-        color: '#213547'
-      },
-      {
-        name: 'Not Manually Underwritten',
-        value: totals.withoutManualUW,
-        color: '#93b244'
-      }
-    ];
+    return apiData.map(item => {
+      // Get the gender value and handle it case-insensitively
+      const genderKey = item.gender ? item.gender.toUpperCase() : 'Unknown';
+      
+      // Only map M and F to Male and Female, treat others as Unknown
+      const mappedGender = genderKey === 'M' || genderKey === 'F' 
+        ? genderMap[genderKey] 
+        : genderMap['Unknown'];
+      
+      return {
+        name: mappedGender.name,
+        value: parseInt(item.total_count),
+        color: mappedGender.color
+      };
+    }).filter(Boolean);
   };
   
   const chartData = formatChartData(data);
@@ -34,7 +38,7 @@ const ManualUWStatusChart = () => {
   if (isLoading) {
     return (
       <div className="w-full h-80 flex items-center justify-center">
-        <p className="text-gray-500">Loading chart data...</p>
+        <p className="text-gray-500">Loading gender data...</p>
       </div>
     );
   }
@@ -42,7 +46,7 @@ const ManualUWStatusChart = () => {
   if (error) {
     return (
       <div className="w-full h-80 flex items-center justify-center">
-        <p className="text-red-500">Error loading chart data</p>
+        <p className="text-red-500">Error loading gender data</p>
       </div>
     );
   }
@@ -68,7 +72,7 @@ const ManualUWStatusChart = () => {
 
   return (
     <div className="w-full h-80">
-      <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Manual Underwriting Distribution</h3>
+      <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Gender Distribution</h3>
       <ResponsiveContainer width="100%" height="90%">
         <PieChart>
           <Pie
@@ -77,8 +81,8 @@ const ManualUWStatusChart = () => {
             nameKey="name"
             cx="50%"
             cy="50%"
-            outerRadius={120}
-            innerRadius={60}
+            outerRadius={80}
+            innerRadius={40}
             paddingAngle={2}
           >
             {chartData.map((entry, index) => (
@@ -103,6 +107,6 @@ const ManualUWStatusChart = () => {
       </ResponsiveContainer>
     </div>
   );
-}
+};
 
-export default ManualUWStatusChart; 
+export default GenderPieChart; 

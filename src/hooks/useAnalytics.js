@@ -95,6 +95,60 @@ export function useAnalytics() {
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
   
+  // Query to fetch province data with filters
+  const provinceDataQuery = useQuery({
+    queryKey: ['analytics', 'province-data', statusFilter, dateRange],
+    queryFn: async () => {
+      const queryParams = getQueryParams()
+      const url = `${import.meta.env.VITE_API_URL}/api/analytics/applications/count-province${queryParams ? `?${queryParams}` : ''}`
+      
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return response.data
+    },
+    enabled: !!token,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+  
+  // Query to fetch gender data with filters
+  const genderDataQuery = useQuery({
+    queryKey: ['analytics', 'gender-data', statusFilter, dateRange],
+    queryFn: async () => {
+      const queryParams = getQueryParams()
+      const url = `${import.meta.env.VITE_API_URL}/api/analytics/applications/count-gender${queryParams ? `?${queryParams}` : ''}`
+      
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return response.data
+    },
+    enabled: !!token,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+  
+  // Query to fetch age bin data with filters
+  const ageBinDataQuery = useQuery({
+    queryKey: ['analytics', 'age-bin-data', statusFilter, dateRange],
+    queryFn: async () => {
+      const queryParams = getQueryParams()
+      const url = `${import.meta.env.VITE_API_URL}/api/analytics/applications/count-age${queryParams ? `?${queryParams}` : ''}`
+      
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return response.data
+    },
+    enabled: !!token,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+  
   return {
     applicationStatus: {
       data: applicationStatusQuery.data,
@@ -116,12 +170,30 @@ export function useAnalytics() {
       isLoading: applicationSummaryQuery.isLoading,
       error: applicationSummaryQuery.error
     },
+    provinceData: {
+      data: provinceDataQuery.data,
+      isLoading: provinceDataQuery.isLoading,
+      error: provinceDataQuery.error
+    },
+    genderData: {
+      data: genderDataQuery.data,
+      isLoading: genderDataQuery.isLoading,
+      error: genderDataQuery.error
+    },
+    ageBinData: {
+      data: ageBinDataQuery.data,
+      isLoading: ageBinDataQuery.isLoading,
+      error: ageBinDataQuery.error
+    },
     // Add a refetch function to manually trigger data refresh
     refetch: () => {
       applicationStatusQuery.refetch()
       magnumDecisionQuery.refetch()
       applicationTrendQuery.refetch()
       applicationSummaryQuery.refetch()
+      provinceDataQuery.refetch()
+      genderDataQuery.refetch()
+      ageBinDataQuery.refetch()
     }
   }
 } 
