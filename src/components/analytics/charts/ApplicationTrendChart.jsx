@@ -1,6 +1,7 @@
 import { Line, XAxis } from 'recharts';
 import { useAnalytics } from '../../../hooks/useAnalytics';
 import { ModernLineChart } from '../ui/charts/ModernCharts';
+import { ResponsiveContainer } from 'recharts';
 
 const ApplicationTrendChart = () => {
   const { applicationTrend: { data, isLoading, error } } = useAnalytics();
@@ -51,25 +52,27 @@ const ApplicationTrendChart = () => {
 
   return (
     <div className="w-full h-80">
-      <ModernLineChart
-        data={chartData}
-        title="Application Trend Over Time"
-        tooltipFormatter={(value) => [`${value} Applications`, 'Count']}
-        height="90%"
-      >
-        <XAxis 
-          dataKey="name" 
-          axisLine={true} 
-          tickLine={false} 
-          tick={{ fill: '#213547', fontSize: 12 }}
-        />
-        <Line 
-          type="monotone" 
-          dataKey="count" 
-          name="Applications" 
-          stroke="#93B244"
-        />
-      </ModernLineChart>
+      <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Application Trend Over Time</h3>
+      <ResponsiveContainer width="100%" height="90%">
+        <ModernLineChart
+          data={chartData}
+          title="Application Trend Over Time"
+          tooltipFormatter={(value) => [`${value} Applications`, 'Count']}
+        >
+          <XAxis 
+            dataKey="name" 
+            axisLine={true} 
+            tickLine={false} 
+            tick={{ fill: '#213547', fontSize: 12 }}
+          />
+          <Line 
+            type="monotone" 
+            dataKey="count" 
+            name="Applications" 
+            stroke="#93B244"
+          />
+        </ModernLineChart>
+      </ResponsiveContainer>
     </div>
   );
 }

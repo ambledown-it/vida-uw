@@ -26,19 +26,22 @@ const AnalyticsDashboard = () => {
   };
 
   return (
-    <div className="h-full w-full bg-white rounded-lg shadow-sm overflow-auto">
-      <div className="p-4">
-        
-        {/* Analytics Tabs */}
-        <AnalyticsTabs 
-          activeTab={activeTab} 
-          onTabChange={setActiveTab} 
-        />
-        
-        {/* Analytics Filters */}
-        <AnalyticsFilters />
-        
-        {/* Render the active board */}
+    <div className="h-full w-full flex flex-col bg-white rounded-lg shadow-sm overflow-hidden">
+      {/* Fixed Header Section */}
+      <div className="flex-none">
+        <div className="p-4">
+          <AnalyticsTabs 
+            activeTab={activeTab} 
+            onTabChange={setActiveTab} 
+          />
+        </div>
+        <div className="px-4 pb-4">
+          <AnalyticsFilters />
+        </div>
+      </div>
+      
+      {/* Scrollable Content Section */}
+      <div className="flex-1 overflow-auto px-4 pb-4">
         {renderActiveBoard()}
       </div>
     </div>

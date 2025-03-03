@@ -1,30 +1,32 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useAnalytics } from '../../../hooks/useAnalytics';
 
-const ApplicationStatusChart = () => {
+const ManualUWStatusChart = () => {
   const { applicationStatus: { data, isLoading, error } } = useAnalytics();
   
-  // Format data for Recharts (your existing function)
+  // Format data for Recharts
   const formatChartData = (apiData) => {
     if (!apiData || !Array.isArray(apiData)) return [];
     
-    // Map statuses to friendly names and colors
-    const statusMap = {
-      '1': { name: 'Open', color: '#9CA3AF' },
-      '2': { name: 'Referred', color: '#213547' },
-      '3': { name: 'Accepted', color: '#93b244' },
-      '4': { name: 'Rejected', color: '#B2445C' }
-    };
+    // Calculate totals across all statuses
+    const totals = apiData.reduce((acc, item) => {
+      acc.withManualUW += parseInt(item.with_manualuwid);
+      acc.withoutManualUW += parseInt(item.without_manualuwid);
+      return acc;
+    }, { withManualUW: 0, withoutManualUW: 0 });
     
-    return apiData.map(item => {
-      return {
-        name: statusMap[item.statusid]?.name || `Status ${item.statusid}`,
-        value: parseInt(item.total_count),
-        color: statusMap[item.statusid]?.color || '#9CA3AF',
-        manualUW: parseInt(item.with_manualuwid),
-        withoutManualUW: parseInt(item.without_manualuwid)
-      };
-    }).filter(Boolean);
+    return [
+      {
+        name: 'Manual UW',
+        value: totals.withManualUW,
+        color: '#213547'
+      },
+      {
+        name: 'Without Manual UW',
+        value: totals.withoutManualUW,
+        color: '#93b244'
+      }
+    ];
   };
   
   const chartData = formatChartData(data);
@@ -52,9 +54,7 @@ const ApplicationStatusChart = () => {
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-sm">
           <p className="font-medium text-[#213547]">{data.name}</p>
-          <p className="text-gray-600">Total: {data.value} Applications</p>
-          <p className="text-gray-600">With Manual UW: {data.manualUW}</p>
-          <p className="text-gray-600">Without Manual UW: {data.withoutManualUW}</p>
+          <p className="text-gray-600">{data.value} Applications</p>
         </div>
       );
     }
@@ -68,7 +68,7 @@ const ApplicationStatusChart = () => {
 
   return (
     <div className="w-full h-80">
-      <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Application Status Distribution</h3>
+      <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Manual Underwriting Distribution</h3>
       <ResponsiveContainer width="100%" height="90%">
         <PieChart>
           <Pie
@@ -104,4 +104,4 @@ const ApplicationStatusChart = () => {
   );
 }
 
-export default ApplicationStatusChart;
+export default ManualUWStatusChart; 

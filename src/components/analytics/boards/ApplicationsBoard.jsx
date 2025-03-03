@@ -1,6 +1,7 @@
 import ApplicationStatusChart from '../charts/ApplicationStatusChart';
 import ApplicationTrendChart from '../charts/ApplicationTrendChart';
 import ApplicationSummaryCards from '../charts/ApplicationSummaryCards';
+import ManualUWStatusChart from '../charts/ManualUWStatusChart';
 
 const ApplicationsBoard = () => {
   return (
@@ -11,13 +12,16 @@ const ApplicationsBoard = () => {
       </div>
       
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Application Status Chart Card */}
+      <div className="grid grid-cols-1 gap-6">
+        {/* Status and Manual UW Charts Card */}
         <div className="bg-white border border-gray-100 rounded-lg shadow-sm p-4">
-          <ApplicationStatusChart />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ApplicationStatusChart />
+            <ManualUWStatusChart />
+          </div>
         </div>
-        
-        {/* Application Trend Chart Card */}
+
+        {/* Trend Chart */}
         <div className="bg-white border border-gray-100 rounded-lg shadow-sm p-4">
           <ApplicationTrendChart />
         </div>
