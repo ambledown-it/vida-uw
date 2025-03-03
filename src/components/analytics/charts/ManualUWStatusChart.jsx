@@ -17,12 +17,12 @@ const ManualUWStatusChart = () => {
     
     return [
       {
-        name: 'Manual UW',
+        name: 'Manually Underwritten',
         value: totals.withManualUW,
         color: '#213547'
       },
       {
-        name: 'Without Manual UW',
+        name: 'Not Manually Underwritten',
         value: totals.withoutManualUW,
         color: '#93b244'
       }

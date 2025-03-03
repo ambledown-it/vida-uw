@@ -40,6 +40,24 @@ export function useAnalytics() {
     enabled: !!token,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
+
+  // Query to fetch Magnum decision counts with filters
+  const magnumDecisionQuery = useQuery({
+    queryKey: ['analytics', 'magnum-decision', statusFilter, dateRange],
+    queryFn: async () => {
+      const queryParams = getQueryParams()
+      const url = `${import.meta.env.VITE_API_URL}/api/analytics/applications/count-magnum${queryParams ? `?${queryParams}` : ''}`
+      
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return response.data
+    },
+    enabled: !!token,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
   
   // Query to fetch application trend data with filters
   const applicationTrendQuery = useQuery({
@@ -83,6 +101,11 @@ export function useAnalytics() {
       isLoading: applicationStatusQuery.isLoading,
       error: applicationStatusQuery.error
     },
+    magnumDecision: {
+      data: magnumDecisionQuery.data,
+      isLoading: magnumDecisionQuery.isLoading,
+      error: magnumDecisionQuery.error
+    },
     applicationTrend: {
       data: applicationTrendQuery.data,
       isLoading: applicationTrendQuery.isLoading,
@@ -96,6 +119,7 @@ export function useAnalytics() {
     // Add a refetch function to manually trigger data refresh
     refetch: () => {
       applicationStatusQuery.refetch()
+      magnumDecisionQuery.refetch()
       applicationTrendQuery.refetch()
       applicationSummaryQuery.refetch()
     }

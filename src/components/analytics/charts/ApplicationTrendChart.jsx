@@ -56,7 +56,7 @@ const ApplicationTrendChart = () => {
       <ResponsiveContainer width="100%" height="90%">
         <ModernLineChart
           data={chartData}
-          title="Application Trend Over Time"
+          title=""
           tooltipFormatter={(value) => [`${value} Applications`, 'Count']}
         >
           <XAxis 

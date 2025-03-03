@@ -1,28 +1,26 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useAnalytics } from '../../../hooks/useAnalytics';
 
-const ApplicationStatusChart = () => {
-  const { applicationStatus: { data, isLoading, error } } = useAnalytics();
+const MagnumDecisionChart = () => {
+  const { magnumDecision: { data, isLoading, error } } = useAnalytics();
   
-  // Format data for Recharts (your existing function)
+  // Format data for Recharts
   const formatChartData = (apiData) => {
     if (!apiData || !Array.isArray(apiData)) return [];
     
-    // Map statuses to friendly names and colors
-    const statusMap = {
-      '1': { name: 'Open', color: '#9CA3AF' },
-      '2': { name: 'Referred', color: '#213547' },
-      '3': { name: 'Accepted', color: '#93b244' },
-      '4': { name: 'Rejected', color: '#B2445C' }
+    // Map decisions to friendly names and colors
+    const decisionMap = {
+      'ACCEPT': { name: 'Accept', color: '#93b244' },
+      'REFER': { name: 'Refer', color: '#F59E0B' },
+      'REJECT': { name: 'Reject', color: '#B2445C' },
+      'Pending': { name: 'Pending', color: '#9CA3AF' }
     };
     
     return apiData.map(item => {
       return {
-        name: statusMap[item.statusid]?.name || `Status ${item.statusid}`,
+        name: decisionMap[item.decision]?.name || item.decision.toUpperCase(),
         value: parseInt(item.total_count),
-        color: statusMap[item.statusid]?.color || '#9CA3AF',
-        manualUW: parseInt(item.with_manualuwid),
-        withoutManualUW: parseInt(item.without_manualuwid)
+        color: decisionMap[item.decision]?.color || '#213547'
       };
     }).filter(Boolean);
   };
@@ -66,7 +64,7 @@ const ApplicationStatusChart = () => {
 
   return (
     <div className="w-full h-80">
-      <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Application Status Distribution</h3>
+      <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Magnum Decision Distribution</h3>
       <ResponsiveContainer width="100%" height="90%">
         <PieChart>
           <Pie
@@ -102,4 +100,4 @@ const ApplicationStatusChart = () => {
   );
 }
 
-export default ApplicationStatusChart;
+export default MagnumDecisionChart; 
