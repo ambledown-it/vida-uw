@@ -1,6 +1,5 @@
-import { Bar, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useAnalytics } from '../../../hooks/useAnalytics';
-import { ModernBarChart } from '../ui/charts/ModernCharts';
 
 const ApplicationStatusChart = () => {
   const { applicationStatus: { data, isLoading, error } } = useAnalytics();
@@ -12,9 +11,9 @@ const ApplicationStatusChart = () => {
     // Map statuses to friendly names and colors
     const statusMap = {
       '1': { name: 'Open', color: '#9CA3AF' },
-      '2': { name: 'Referred', color: '#F59E0B' },
-      '3': { name: 'Accepted', color: '#93B244' },
-      '4': { name: 'Rejected', color: '#EF4444' }
+      '2': { name: 'Referred', color: '#213547' },
+      '3': { name: 'Accepted', color: '#93b244' },
+      '4': { name: 'Rejected', color: '#B2445C' }
     };
     
     return apiData.map(item => {
@@ -26,7 +25,7 @@ const ApplicationStatusChart = () => {
       
       return {
         name: statusMap[statusId]?.name || `Status ${statusId}`,
-        count: parseInt(count),
+        value: parseInt(count),
         color: statusMap[statusId]?.color || '#9CA3AF'
       };
     }).filter(Boolean);
@@ -50,20 +49,59 @@ const ApplicationStatusChart = () => {
     );
   }
 
+  // Custom tooltip formatter
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-sm">
+          <p className="font-medium text-[#213547]">{data.name}</p>
+          <p className="text-gray-600">{data.value} Applications</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Custom legend renderer
+  const renderColorfulLegendText = (value, entry) => {
+    return <span className="text-sm text-[#213547]">{value}</span>;
+  };
+
   return (
     <div className="w-full h-80">
-      <ModernBarChart
-        data={chartData}
-        title="Application Status Distribution"
-        tooltipFormatter={(value) => [`${value} Applications`, 'Count']}
-        height="90%"
-      >
-        <Bar 
-          dataKey="count" 
-          name="Applications" 
-          fill="#93B244"
-        />
-      </ModernBarChart>
+      <h3 className="text-lg font-semibold mb-2 text-[#213547]">Application Status Distribution</h3>
+      <ResponsiveContainer width="100%" height="90%">
+        <PieChart>
+          <Pie
+            data={chartData}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={120}
+            innerRadius={60}
+            paddingAngle={2}
+          >
+            {chartData.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={entry.color}
+                stroke="white"
+                strokeWidth={2}
+              />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
+          <Legend 
+            formatter={renderColorfulLegendText}
+            iconType="circle"
+            layout="horizontal"
+            verticalAlign="bottom"
+            align="center"
+          />
+        </PieChart>
+      </ResponsiveContainer>
     </div>
   );
 }

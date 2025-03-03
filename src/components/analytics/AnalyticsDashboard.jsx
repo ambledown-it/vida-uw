@@ -26,7 +26,7 @@ const AnalyticsDashboard = () => {
   };
 
   return (
-    <div className="h-full w-full bg-transparent rounded-lg shadow-sm overflow-auto">
+    <div className="h-full w-full bg-white rounded-lg shadow-sm overflow-auto">
       <div className="p-4">
         
         {/* Analytics Tabs */}

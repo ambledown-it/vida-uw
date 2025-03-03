@@ -1,5 +1,6 @@
 import { useAnalytics } from '../../../hooks/useAnalytics';
 import { ClipboardList, CalendarDays, BarChart2, Database, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import chartTheme from '../config/chartTheme';
 
 const ApplicationSummaryCards = () => {
   const { applicationSummary: { data, isLoading, error } } = useAnalytics();
@@ -57,32 +58,40 @@ const ApplicationSummaryCards = () => {
     const weekChange = calculateChange(safeData.week_count, safeData.previous_week_count);
     const monthChange = calculateChange(safeData.last_30_days_count, safeData.previous_30_days_count);
     
+    // Get colors from the chart theme
+    const primaryColor = chartTheme.colors.primary; // Green
+    const secondaryColor = chartTheme.colors.secondary; // Dark blue/gray
+    
     return [
       {
         title: 'Today',
         value: safeData.today_count,
         change: todayChange,
         previousLabel: 'vs yesterday',
-        icon: <ClipboardList className="w-8 h-8" />
+        icon: <ClipboardList className="w-5 h-5 text-white" />,
+        bgColor: primaryColor
       },
       {
         title: 'Last 7 Days',
         value: safeData.week_count,
         change: weekChange,
         previousLabel: 'vs previous 7 days',
-        icon: <CalendarDays className="w-8 h-8" />
+        icon: <CalendarDays className="w-5 h-5 text-white" />,
+        bgColor: secondaryColor
       },
       {
         title: 'Last 30 Days',
         value: safeData.last_30_days_count,
         change: monthChange,
         previousLabel: 'vs previous 30 days',
-        icon: <BarChart2 className="w-8 h-8" />
+        icon: <BarChart2 className="w-5 h-5 text-white" />,
+        bgColor: primaryColor
       },
       {
         title: 'Lifetime Applications',
         value: safeData.total_count,
-        icon: <Database className="w-8 h-8" />
+        icon: <Database className="w-5 h-5 text-white" />,
+        bgColor: secondaryColor
       }
     ];
   };
@@ -91,8 +100,8 @@ const ApplicationSummaryCards = () => {
     if (!change) return null;
     if (change.isNoChange) return <Minus className="w-4 h-4" />;
     return change.isIncrease 
-      ? <TrendingUp className="w-4 h-4 text-green-500" /> 
-      : <TrendingDown className="w-4 h-4 text-red-500" />;
+      ? <TrendingUp className="w-4 h-4 text-[#93B244]" /> 
+      : <TrendingDown className="w-4 h-4 text-[#EF4444]" />;
   };
 
   if (isLoading) {
@@ -115,7 +124,7 @@ const ApplicationSummaryCards = () => {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg=transparent">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((card, index) => (
           <div 
             key={index} 
@@ -133,7 +142,7 @@ const ApplicationSummaryCards = () => {
                   <span className={`text-xs ml-1 ${
                     card.change.isNoChange 
                       ? 'text-gray-500' 
-                      : (card.change.isIncrease ? 'text-green-500' : 'text-red-500')
+                      : (card.change.isIncrease ? 'font-bold text-[#93B244]' : 'font-bold text-red-500')
                   }`}>
                     {card.change.isNoChange ? 'No change' : `${card.change.value}%`}
                     {' '}
@@ -142,7 +151,10 @@ const ApplicationSummaryCards = () => {
                 </div>
               )}
             </div>
-            <div className="ml-4 text-gray-500">
+            <div 
+              className="flex items-center justify-center w-10 h-10 rounded-full" 
+              style={{ backgroundColor: card.bgColor }}
+            >
               {card.icon}
             </div>
           </div>
