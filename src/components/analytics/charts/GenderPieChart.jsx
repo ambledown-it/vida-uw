@@ -37,7 +37,7 @@ const GenderPieChart = () => {
   
   if (isLoading) {
     return (
-      <div className="w-full h-80 flex items-center justify-center">
+      <div className="w-full h-96 flex items-center justify-center">
         <p className="text-gray-500">Loading gender data...</p>
       </div>
     );
@@ -45,7 +45,7 @@ const GenderPieChart = () => {
   
   if (error) {
     return (
-      <div className="w-full h-80 flex items-center justify-center">
+      <div className="w-full h-96 flex items-center justify-center">
         <p className="text-red-500">Error loading gender data</p>
       </div>
     );
@@ -71,7 +71,7 @@ const GenderPieChart = () => {
   };
 
   return (
-    <div className="w-full h-80">
+    <div className="w-full h-96">
       <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Gender Distribution</h3>
       <ResponsiveContainer width="100%" height="90%">
         <PieChart>
@@ -81,8 +81,8 @@ const GenderPieChart = () => {
             nameKey="name"
             cx="50%"
             cy="50%"
-            outerRadius={80}
-            innerRadius={40}
+            outerRadius={110}
+            innerRadius={55}
             paddingAngle={2}
           >
             {chartData.map((entry, index) => (

@@ -4,39 +4,42 @@ import { useAnalytics } from '../../../hooks/useAnalytics';
 import { ModernBarChart } from '../ui/charts/ModernCharts';
 import chartTheme from '../config/chartTheme';
 
-const AgeBinBarChart = () => {
-  const { ageBinData: { data, isLoading, error } } = useAnalytics();
+const IncomeBarChart = () => {
+  const { incomeData: { data, isLoading, error } } = useAnalytics();
   
   // Format data for Recharts
   const formatChartData = (apiData) => {
     if (!apiData || !Array.isArray(apiData)) return [];
     
-    // Define the order of age bins (10-year intervals)
-    const ageBinOrder = [
-      'Under 20',
-      '20-29',
-      '30-39',
-      '40-49',
-      '50-59',
-      '60-69',
-      '70+'
+    // Define the order of income bins
+    const incomeBinOrder = [
+      'Under R10,000',
+      'R10,000-R20,000',
+      'R20,001-R30,000',
+      'R30,001-R50,000',
+      'R50,001-R100,000',
+      'Over R100,000'
     ];
     
     // Create a map to hold the data
     const dataMap = {};
-    ageBinOrder.forEach(bin => {
-      dataMap[bin] = { name: bin, value: 0, color: chartTheme.colors.primary };
+    incomeBinOrder.forEach((bin) => {
+      dataMap[bin] = { 
+        name: bin, 
+        value: 0, 
+        color: chartTheme.colors.primary // Use the same primary color for all bars
+      };
     });
     
     // Fill in the actual data
     apiData.forEach(item => {
-      if (item.age_bin && dataMap[item.age_bin]) {
-        dataMap[item.age_bin].value = parseInt(item.total_count);
+      if (item.income_bin && dataMap[item.income_bin]) {
+        dataMap[item.income_bin].value = parseInt(item.total_count);
       }
     });
     
     // Convert back to array in the correct order
-    return ageBinOrder.map(bin => dataMap[bin]);
+    return incomeBinOrder.map(bin => dataMap[bin]);
   };
   
   const chartData = formatChartData(data);
@@ -44,7 +47,7 @@ const AgeBinBarChart = () => {
   if (isLoading) {
     return (
       <div className="w-full h-80 flex items-center justify-center">
-        <p className="text-gray-500">Loading age distribution data...</p>
+        <p className="text-gray-500">Loading income distribution data...</p>
       </div>
     );
   }
@@ -52,7 +55,17 @@ const AgeBinBarChart = () => {
   if (error) {
     return (
       <div className="w-full h-80 flex items-center justify-center">
-        <p className="text-red-500">Error loading age distribution data</p>
+        <p className="text-red-500">Error loading income distribution data</p>
+        {error.message && <p className="text-sm text-red-400 mt-2">{error.message}</p>}
+      </div>
+    );
+  }
+  
+  // Check if we have any data to display
+  if (!chartData || chartData.length === 0 || chartData.every(item => item.value === 0)) {
+    return (
+      <div className="w-full h-80 flex items-center justify-center">
+        <p className="text-gray-500">No income data available for the selected filters</p>
       </div>
     );
   }
@@ -63,8 +76,8 @@ const AgeBinBarChart = () => {
   };
 
   return (
-    <div className="w-full h-80 mt-24">
-        <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Applications by Age group</h3>
+    <div className="w-full h-80 mt-6">
+      <h3 className="text-lg font-semibold mb-2 text-[#213547] text-center">Applications by Income Level</h3>
       <ModernBarChart 
         data={chartData}
         title=""
@@ -80,7 +93,7 @@ const AgeBinBarChart = () => {
           {chartData.map((entry, index) => (
             <Cell 
               key={`cell-${index}`} 
-              fill={entry.color}
+              fill={chartTheme.colors.primary}
             />
           ))}
         </Bar>
@@ -89,4 +102,4 @@ const AgeBinBarChart = () => {
   );
 };
 
-export default AgeBinBarChart; 
+export default IncomeBarChart; 

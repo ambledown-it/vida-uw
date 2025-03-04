@@ -91,7 +91,7 @@ const AnalyticsFilters = () => {
           
           {/* Status Dropdown with Label */}
           <div className="relative w-full md:w-64" ref={dropdownRef}>
-            <label className="block text-white text-sm font-medium mb-1">
+            <label className="block text-white text-sm font-medium mb-1 rounded-lg">
               Application Status
             </label>
             <button
@@ -161,7 +161,7 @@ const AnalyticsFilters = () => {
             
             {/* Active Date Range Indicator */}
             {isDateFilterActive && (
-              <div className="mt-4 md:mt-8 text-white text-sm p-1 px-2 bg-blue-500 bg-opacity-20 rounded-md inline-flex items-center md:ml-2">
+              <div className="mt-4 md:mt-8 text-white text-sm p-1 px-2 bg-[#93b244] bg-opacity-20 rounded-md inline-flex items-center md:ml-2">
                 <span>Filtering: {formatDate(dateRange.start)} - {formatDate(dateRange.end)}</span>
               </div>
             )}

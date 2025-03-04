@@ -720,6 +720,7 @@ textarea:focus {
   color: #213547;
   width: 75%;
   height: 100%;
+  border-radius: 0.5rem;
 }
 
 .filter-dropdown:hover {
