@@ -5,7 +5,19 @@ import { ModernBarChart } from '../ui/charts/ModernCharts';
 import chartTheme from '../config/chartTheme';
 
 const IncomeBarChart = () => {
-  const { incomeData: { data, isLoading, error } } = useAnalytics();
+  const { incomeData: { data, isLoading, error, refetch } } = useAnalytics();
+  const [noDataMessage, setNoDataMessage] = useState('');
+  
+  // Check for 404 errors specifically
+  useEffect(() => {
+    if (error?.response?.status === 404) {
+      setNoDataMessage('No income data available for the selected filters');
+    } else if (error) {
+      setNoDataMessage('Error loading income data');
+    } else {
+      setNoDataMessage('');
+    }
+  }, [error]);
   
   // Format data for Recharts
   const formatChartData = (apiData) => {
@@ -52,11 +64,18 @@ const IncomeBarChart = () => {
     );
   }
   
-  if (error) {
+  if (noDataMessage) {
     return (
-      <div className="w-full h-80 flex items-center justify-center">
-        <p className="text-red-500">Error loading income distribution data</p>
-        {error.message && <p className="text-sm text-red-400 mt-2">{error.message}</p>}
+      <div className="w-full h-80 flex flex-col items-center justify-center">
+        <p className="text-gray-500">{noDataMessage}</p>
+        {error && !error.response?.status === 404 && (
+          <button 
+            onClick={() => refetch()} 
+            className="mt-3 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm"
+          >
+            Try Again
+          </button>
+        )}
       </div>
     );
   }
