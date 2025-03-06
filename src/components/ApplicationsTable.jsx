@@ -76,8 +76,13 @@ const ApplicationsTable = () => {
       // Status tab filter - skip for "All" tab
       if (activeTab !== '5') {
         if (activeTab === '3') {
-          // Show both status 3 and 4 in Closed tab
-          if (app.statusid !== '3' && app.statusid !== '4') {
+          // Show statuses 4, 5, and 6 in Closed tab
+          if (app.statusid !== '4' && app.statusid !== '5' && app.statusid !== '6') {
+            return false
+          }
+        } else if (activeTab === '1') {
+          // Show statuses 1, 2, and 3 in Open tab
+          if (app.statusid !== '1' && app.statusid !== '2' && app.statusid !== '3') {
             return false
           }
         } else if (app.statusid !== activeTab) {
@@ -193,8 +198,8 @@ const ApplicationsTable = () => {
           <div className="bg-[#213547] rounded-lg">
             <table className="w-full table-fixed">
               <colgroup>
-                <col className="w-[6%]" />
-                <col className="w-[4%]" />
+                <col className="w-[8%]" />
+                <col className="w-[2%]" />
                 <col className="w-[8%]" />
                 <col className="w-[17%]" />
                 <col className="w-[15%]" />
@@ -212,7 +217,7 @@ const ApplicationsTable = () => {
                     {/* Empty header for Manual UW icon */}
                   </th>
                   <th className="px-6 py-3 text-center text-sm font-bold text-white">
-                    Application ID
+                    ID
                   </th>
                   <th className="px-6 py-3 text-center text-sm font-bold text-white">
                     Applicant Name
@@ -241,8 +246,8 @@ const ApplicationsTable = () => {
           <div className="flex-1 overflow-auto min-h-0 rounded-b-lg py-4">
             <table className="w-full table-fixed">
               <colgroup>
-                <col className="w-[6%]" />
-                <col className="w-[4%]" />
+                <col className="w-[8%]" />
+                <col className="w-[2%]" />
                 <col className="w-[8%]" />
                 <col className="w-[17%]" />
                 <col className="w-[15%]" />

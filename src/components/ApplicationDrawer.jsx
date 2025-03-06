@@ -53,7 +53,6 @@ const ApplicationDrawer = ({ isOpen, onClose, applicationId, applicantName, idNu
             <div>
               <StatusBadge 
                 status={applicationDetails[0]?.detailedstatus} 
-                actioner={applicationDetails[0]?.actioner}
               />
             </div>
           )}
